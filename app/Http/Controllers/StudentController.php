@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Student;
+use App\Models\SchoolClass;
+use Illuminate\Http\Request;
+
+class StudentController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = Student::with(['schoolClass', 'behaviorRecords.violationType']);
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nisn', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by class
+        if ($request->filled('class_id')) {
+            $query->where('class_id', $request->class_id);
+        }
+
+        $students = $query->orderBy('name')->paginate(15)->withQueryString();
+        $classes = SchoolClass::orderBy('name')->get();
+
+        return view('students.index', compact('students', 'classes'));
+    }
+
+    public function create()
+    {
+        $classes = SchoolClass::orderBy('name')->get();
+        return view('students.create', compact('classes'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nisn' => 'nullable|string|max:20|unique:students,nisn',
+            'class_id' => 'required|exists:classes,id',
+            'gender' => 'required|in:L,P',
+        ]);
+
+        Student::create($request->only(['name', 'nisn', 'class_id', 'gender']));
+
+        return redirect()->route('students.index')->with('success', 'Siswa berhasil ditambahkan!');
+    }
+
+    public function show(Student $student)
+    {
+        $student->load(['schoolClass', 'behaviorRecords.violationType', 'healthRecords']);
+        $totalPoints = $student->behaviorRecords->sum(function ($record) {
+            return $record->violationType->points ?? 0;
+        });
+
+        return view('students.show', compact('student', 'totalPoints'));
+    }
+
+    public function edit(Student $student)
+    {
+        $classes = SchoolClass::orderBy('name')->get();
+        return view('students.edit', compact('student', 'classes'));
+    }
+
+    public function update(Request $request, Student $student)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nisn' => 'nullable|string|max:20|unique:students,nisn,' . $student->id,
+            'class_id' => 'required|exists:classes,id',
+            'gender' => 'required|in:L,P',
+        ]);
+
+        $student->update($request->only(['name', 'nisn', 'class_id', 'gender']));
+
+        return redirect()->route('students.index')->with('success', 'Data siswa berhasil diperbarui!');
+    }
+
+    public function destroy(Student $student)
+    {
+        $student->delete();
+        return redirect()->route('students.index')->with('success', 'Siswa berhasil dihapus!');
+    }
+}
