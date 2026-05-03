@@ -6,7 +6,6 @@ use App\Models\Student;
 use App\Models\SchoolClass;
 use App\Models\ViolationType;
 use App\Models\VitaminType;
-use App\Models\HealthRecord;
 use App\Models\BehaviorRecord;
 use Illuminate\Http\Request;
 
@@ -14,15 +13,17 @@ class RecordController extends Controller
 {
     public function index(Request $request)
     {
-        $behavior_records = BehaviorRecord::with(['student', 'user', 'violationType', 'vitaminType'])
+        $violation_records = BehaviorRecord::with(['student', 'user', 'violationType'])
+            ->whereNotNull('violation_type_id')
             ->latest()
-            ->paginate(15, ['*'], 'behavior_page');
+            ->paginate(15, ['*'], 'violation_page');
 
-        $health_records = HealthRecord::with(['student', 'user'])
+        $vitamin_records = BehaviorRecord::with(['student', 'user', 'vitaminType'])
+            ->whereNotNull('vitamin_type_id')
             ->latest()
-            ->paginate(15, ['*'], 'health_page');
-        
-        return view('records.index', compact('health_records', 'behavior_records'));
+            ->paginate(15, ['*'], 'vitamin_page');
+
+        return view('records.index', compact('violation_records', 'vitamin_records'));
     }
 
     public function create()
@@ -38,24 +39,11 @@ class RecordController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type' => 'required|in:health,behavior,violation,achievement',
+            'type' => 'required|in:violation,achievement',
             'student_id' => 'required|exists:students,id',
         ]);
 
-        if ($request->type === 'health') {
-            $request->validate([
-                'date' => 'required|date',
-            ]);
-
-            HealthRecord::create([
-                'student_id' => $request->student_id,
-                'user_id' => auth()->id(),
-                'date' => $request->date,
-                'temperature' => $request->temperature,
-                'blood_pressure' => $request->blood_pressure,
-                'health_problem' => $request->health_problem,
-            ]);
-        } elseif ($request->type === 'achievement') {
+        if ($request->type === 'achievement') {
             $request->validate([
                 'vitamin_type_id' => 'required|exists:vitamin_types,id',
             ]);
@@ -123,4 +111,3 @@ class RecordController extends Controller
         return redirect()->route('records.index')->with('success', 'Catatan berhasil dihapus!');
     }
 }
-

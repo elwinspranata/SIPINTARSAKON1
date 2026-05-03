@@ -22,18 +22,18 @@
 
         <div class="card stats-card">
             <div class="stats-icon-wrapper" style="background: var(--success-light); color: var(--success);">
-                <i data-lucide="heart-pulse"></i>
+                <i data-lucide="sparkles"></i>
             </div>
-            <div class="stats-label">Check-up Hari Ini</div>
-            <div class="stats-value">{{ $stats['health_today'] ?? 0 }}</div>
+            <div class="stats-label">Total Vitamin</div>
+            <div class="stats-value">{{ $stats['total_vitamins'] ?? 0 }}</div>
         </div>
 
         <div class="card stats-card">
             <div class="stats-icon-wrapper" style="background: var(--warning-light); color: var(--warning);">
                 <i data-lucide="activity"></i>
             </div>
-            <div class="stats-label">Penyakit Baru</div>
-            <div class="stats-value">{{ $stats['violations_today'] ?? 0 }}</div>
+            <div class="stats-label">Hari Ini</div>
+            <div class="stats-value">{{ ($stats['violations_today'] ?? 0) + ($stats['vitamins_today'] ?? 0) }}</div>
         </div>
     </div>
 
@@ -68,20 +68,22 @@
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 0.5rem; flex: 1; overflow-y: auto;">
-                @forelse($recent_violations as $v)
-                <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 16px; transition: all 0.2s; background: #fff; border: 1px solid transparent;" onmouseover="this.style.background='#f8fafc'; this.style.borderColor='var(--border-light)'" onmouseout="this.style.background='#fff'; this.style.borderColor='transparent'">
-                    <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--danger-light); color: var(--danger); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255, 77, 77, 0.1);">
-                        <i data-lucide="alert-triangle" size="20"></i>
+                @php $allRecent = collect()->merge($recent_violations)->merge($recent_vitamins)->sortByDesc('date')->take(8); @endphp
+                @forelse($allRecent as $v)
+                @php $isVitamin = !empty($v->vitamin_type_id); @endphp
+                <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-radius: 12px; transition: all 0.2s; background: #fff; border: 1px solid transparent;" onmouseover="this.style.background='#f8fafc'; this.style.borderColor='var(--border-light)'" onmouseout="this.style.background='#fff'; this.style.borderColor='transparent'">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; background: {{ $isVitamin ? 'var(--success-light)' : 'var(--danger-light)' }}; color: {{ $isVitamin ? 'var(--success)' : 'var(--danger)' }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i data-lucide="{{ $isVitamin ? 'sparkles' : 'alert-triangle' }}" size="18"></i>
                     </div>
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; font-size: 0.875rem; color: var(--text); margin-bottom: 2px;">{{ $v->student->name ?? 'Siswa' }}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">
-                            {{ $v->violationType->name ?? 'Pelanggaran' }} · {{ \Carbon\Carbon::parse($v->date)->diffForHumans() }}
+                        <div style="font-weight: 700; font-size: 0.8125rem; color: var(--text); margin-bottom: 2px;">{{ $v->student->name ?? 'Siswa' }}</div>
+                        <div style="font-size: 0.6875rem; color: var(--text-muted); font-weight: 600;">
+                            {{ $isVitamin ? ($v->vitaminType->name ?? 'Vitamin') : ($v->violationType->name ?? 'Pelanggaran') }} · {{ \Carbon\Carbon::parse($v->date)->diffForHumans() }}
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <span style="font-size: 0.8125rem; font-weight: 800; color: var(--danger); background: var(--danger-light); padding: 0.25rem 0.5rem; border-radius: 8px;">
-                            +{{ $v->violationType->points ?? 0 }}
+                        <span style="font-size: 0.75rem; font-weight: 800; color: {{ $isVitamin ? 'var(--success)' : 'var(--danger)' }}; background: {{ $isVitamin ? 'var(--success-light)' : 'var(--danger-light)' }}; padding: 0.2rem 0.5rem; border-radius: 6px;">
+                            {{ $isVitamin ? '-' : '+' }}{{ $isVitamin ? ($v->vitaminType->points ?? 0) : ($v->violationType->points ?? 0) }}
                         </span>
                     </div>
                 </div>
@@ -90,8 +92,8 @@
                     <div style="width: 64px; height: 64px; border-radius: 20px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
                         <i data-lucide="clipboard-check" size="32" style="opacity: 0.2;"></i>
                     </div>
-                    <div style="font-weight: 700; font-size: 0.875rem; color: var(--text-secondary);">Belum ada rekam penyakit</div>
-                    <p style="font-size: 0.75rem; margin-top: 4px;">Semua siswa dalam kondisi sehat walafiat.</p>
+                    <div style="font-weight: 700; font-size: 0.875rem; color: var(--text-secondary);">Belum ada aktivitas</div>
+                    <p style="font-size: 0.75rem; margin-top: 4px;">Belum ada catatan penyakit atau vitamin.</p>
                 </div>
                 @endforelse
             </div>

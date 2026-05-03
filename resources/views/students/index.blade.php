@@ -44,7 +44,9 @@
                 <tbody>
                     @forelse($students as $student)
                     @php
-                        $points = $student->behaviorRecords->sum(fn($r) => $r->violationType->points ?? 0);
+                        $vPoints = $student->behaviorRecords->whereNotNull('violation_type_id')->sum(fn($r) => $r->violationType->points ?? 0);
+                        $aPoints = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sum(fn($r) => $r->vitaminType->points ?? 0);
+                        $points = max(0, $vPoints - $aPoints);
                         if($points > 100) { $sc = 'danger'; $st = 'KRITIS'; $pc = 'var(--danger)'; }
                         elseif($points > 50) { $sc = 'warning'; $st = 'WASPADA'; $pc = 'var(--warning)'; }
                         elseif($points > 20) { $sc = 'info'; $st = 'BAIK'; $pc = 'var(--info)'; }

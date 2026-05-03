@@ -6,13 +6,25 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ViolationTypeController;
 use App\Http\Controllers\Admin\VitaminTypeController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+// Pending approval page (authenticated but not approved)
 Route::middleware(['auth'])->group(function () {
+    Route::get('/approval/pending', function () {
+        if (auth()->user()->is_approved) {
+            return redirect()->route('dashboard');
+        }
+        return view('auth.pending-approval');
+    })->name('approval.pending');
+});
+
+// Main authenticated + approved routes
+Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Records (Pelanggaran & Vitamin)
@@ -45,6 +57,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/vitamin-types', [VitaminTypeController::class, 'store'])->name('vitamin-types.store');
         Route::put('/vitamin-types/{vitaminType}', [VitaminTypeController::class, 'update'])->name('vitamin-types.update');
         Route::delete('/vitamin-types/{vitaminType}', [VitaminTypeController::class, 'destroy'])->name('vitamin-types.destroy');
+
+        // Kelola User Guru
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::patch('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
+        Route::delete('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 
     // Profile routes
@@ -54,4 +74,3 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
-

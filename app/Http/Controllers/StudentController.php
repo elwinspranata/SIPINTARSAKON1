@@ -10,7 +10,7 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Student::with(['schoolClass', 'behaviorRecords.violationType']);
+        $query = Student::with(['schoolClass', 'behaviorRecords.violationType', 'behaviorRecords.vitaminType']);
 
         // Search
         if ($request->filled('search')) {
@@ -54,10 +54,10 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
-        $student->load(['schoolClass', 'behaviorRecords.violationType', 'healthRecords']);
-        $totalPoints = $student->behaviorRecords->sum(function ($record) {
-            return $record->violationType->points ?? 0;
-        });
+        $student->load(['schoolClass', 'behaviorRecords.violationType', 'behaviorRecords.vitaminType', 'behaviorRecords.user']);
+        $totalViolation = $student->behaviorRecords->whereNotNull('violation_type_id')->sum(fn($r) => $r->violationType->points ?? 0);
+        $totalVitamin = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sum(fn($r) => $r->vitaminType->points ?? 0);
+        $totalPoints = max(0, $totalViolation - $totalVitamin);
 
         return view('students.show', compact('student', 'totalPoints'));
     }

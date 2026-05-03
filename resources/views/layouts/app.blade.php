@@ -91,6 +91,14 @@
 
                 @can('admin')
                 <div class="nav-section-title">Admin</div>
+                @php $pendingUserCount = App\Models\User::where('role', 'guru')->where('is_approved', false)->count(); @endphp
+                <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                    <i data-lucide="user-cog" size="18"></i>
+                    <span>Kelola Guru</span>
+                    @if($pendingUserCount > 0)
+                    <span style="background: var(--secondary); color: white; font-size: 0.625rem; font-weight: 800; padding: 2px 7px; border-radius: 99px; margin-left: auto;">{{ $pendingUserCount }}</span>
+                    @endif
+                </a>
                 <a href="{{ route('admin.violation-types.index') }}" class="nav-link {{ request()->routeIs('admin.violation-types.*') ? 'active' : '' }}">
                     <i data-lucide="shield-alert" size="18"></i>
                     <span>Kelola Pelanggaran</span>
