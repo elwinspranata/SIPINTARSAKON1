@@ -48,17 +48,17 @@
 
     {{-- Filter --}}
     <form method="GET" action="{{ route('admin.users.index') }}">
-        <div class="card" style="padding: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
-            <div style="position: relative; flex: 1;">
-                <i data-lucide="search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);" size="15"></i>
-                <input type="text" name="search" class="input" placeholder="Cari nama atau email guru..." style="padding-left: 2.25rem; height: 36px;" value="{{ request('search') }}">
+        <div class="filter-bar">
+            <div class="filter-search">
+                <i data-lucide="search" class="filter-search-icon" size="15"></i>
+                <input type="text" name="search" class="filter-input" placeholder="Cari nama atau email guru..." value="{{ request('search') }}">
             </div>
-            <select name="status" class="select" style="width: 180px; height: 36px;" onchange="this.form.submit()">
+            <select name="status" class="filter-select" onchange="this.form.submit()">
                 <option value="">Semua Status</option>
                 <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Aktif</option>
                 <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
             </select>
-            <button type="submit" class="btn btn-outline" style="height: 36px; padding: 0 1rem;">
+            <button type="submit" class="btn btn-outline filter-btn">
                 <i data-lucide="search" size="14"></i> Cari
             </button>
         </div>

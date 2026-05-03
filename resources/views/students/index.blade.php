@@ -9,21 +9,21 @@
 
     <!-- Filters -->
     <form method="GET" action="{{ route('students.index') }}">
-        <div class="card" style="padding: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
-            <div style="position: relative; flex: 1;">
-                <i data-lucide="search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);" size="15"></i>
-                <input type="text" name="search" class="input" placeholder="Cari nama atau NISN..." style="padding-left: 2.25rem; height: 36px;" value="{{ request('search') }}">
+        <div class="filter-bar">
+            <div class="filter-search">
+                <i data-lucide="search" class="filter-search-icon" size="15"></i>
+                <input type="text" name="search" class="filter-input" placeholder="Cari nama atau NISN..." value="{{ request('search') }}">
             </div>
-            <select name="class_id" class="select" style="width: 160px; height: 36px;" onchange="this.form.submit()">
+            <select name="class_id" class="filter-select" onchange="this.form.submit()">
                 <option value="">Semua Kelas</option>
                 @foreach($classes as $class)
                     <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
                 @endforeach
             </select>
-            <button type="submit" class="btn btn-outline" style="height: 36px; padding: 0 1rem;">
+            <button type="submit" class="btn btn-outline filter-btn">
                 <i data-lucide="search" size="14"></i> Cari
             </button>
-            <span style="font-size: 0.6875rem; color: var(--text-muted); white-space: nowrap;"><strong>{{ $students->total() }}</strong> siswa</span>
+            <span class="filter-count"><strong>{{ $students->total() }}</strong> siswa</span>
         </div>
     </form>
 
