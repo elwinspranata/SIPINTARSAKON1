@@ -21,16 +21,19 @@
                 <input type="hidden" name="type" value="{{ $type }}">
 
                 <div class="form-group">
-                    <label class="label">Pilih Siswa <span style="color: var(--danger);">*</span></label>
-                    <select name="student_id" class="select" required>
-                        <option value="">-- Pilih Siswa --</option>
+                    <label class="label">Pilih Kelas <span style="color: var(--danger);">*</span></label>
+                    <select id="classSelect" class="select" required onchange="loadClassStudents()">
+                        <option value="">-- Pilih Kelas --</option>
                         @foreach($classes as $class)
-                            <optgroup label="{{ $class->name }}">
-                                @foreach($class->students as $student)
-                                    <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>{{ $student->name }}</option>
-                                @endforeach
-                            </optgroup>
+                            <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
                         @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Pilih Siswa <span style="color: var(--danger);">*</span></label>
+                    <select name="student_id" id="studentSelect" class="select" required disabled onchange="loadStudentPoints()">
+                        <option value="">-- Pilih kelas terlebih dahulu --</option>
                     </select>
                 </div>
 
@@ -86,6 +89,21 @@
 
         <!-- Guide Panel -->
         <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {{-- Student Points Info Card (Sidebar) --}}
+            <div id="studentInfoCard" class="card" style="display: none; animation: fadeInUp 0.3s ease-out;">
+                <h3 style="font-size: 0.875rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted);">
+                    <i data-lucide="user-check" size="15"></i> Siswa Terpilih
+                </h3>
+                <div id="infoName" style="font-weight: 800; font-size: 1.125rem; color: var(--text); margin-bottom: 1rem; line-height: 1.2;"></div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-hover); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary); font-weight: 600;">Total Poin</div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span id="infoPoints" style="font-size: 1.25rem; font-weight: 900; line-height: 1;"></span>
+                        <span id="infoStatus" style="font-size: 0.625rem; font-weight: 800; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 99px;"></span>
+                    </div>
+                </div>
+            </div>
             @if($isViolation)
             <div class="card" style="border-left: 3px solid var(--danger);">
                 <h3 style="font-size: 0.875rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -123,4 +141,99 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        var oldStudentId = '{{ old('student_id') }}';
+
+        function loadClassStudents() {
+            var classId = document.getElementById('classSelect').value;
+            var studentSelect = document.getElementById('studentSelect');
+
+            studentSelect.innerHTML = '<option value="">-- Memuat siswa... --</option>';
+            studentSelect.disabled = true;
+            document.getElementById('studentInfoCard').style.display = 'none';
+
+            if (!classId) {
+                studentSelect.innerHTML = '<option value="">-- Pilih kelas terlebih dahulu --</option>';
+                return;
+            }
+
+            fetch('/classes/' + classId + '/students')
+                .then(function(res) { return res.json(); })
+                .then(function(students) {
+                    if (students.length === 0) {
+                        studentSelect.innerHTML = '<option value="">-- Tidak ada siswa --</option>';
+                        return;
+                    }
+
+                    var html = '<option value="">-- Pilih Siswa --</option>';
+                    students.forEach(function(s) {
+                        var selected = oldStudentId == s.id ? ' selected' : '';
+                        html += '<option value="' + s.id + '"' + selected + '>' + s.name + '</option>';
+                    });
+                    studentSelect.innerHTML = html;
+                    studentSelect.disabled = false;
+
+                    // Auto-load points if old student was pre-selected
+                    if (studentSelect.value) {
+                        loadStudentPoints();
+                    }
+                })
+                .catch(function() {
+                    studentSelect.innerHTML = '<option value="">-- Gagal memuat --</option>';
+                });
+        }
+
+        function loadStudentPoints() {
+            var studentId = document.getElementById('studentSelect').value;
+            var card = document.getElementById('studentInfoCard');
+
+            if (!studentId) {
+                card.style.display = 'none';
+                return;
+            }
+
+            fetch('/students/' + studentId + '/points')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    var colorMap = {
+                        danger: { bg: 'var(--danger-light)', text: 'var(--danger)', border: 'rgba(239,68,68,0.15)' },
+                        warning: { bg: 'var(--warning-light)', text: 'var(--warning)', border: 'rgba(245,158,11,0.15)' },
+                        info: { bg: 'var(--info-light)', text: 'var(--info)', border: 'rgba(59,130,246,0.15)' },
+                        success: { bg: 'var(--success-light)', text: 'var(--success)', border: 'rgba(0,210,106,0.15)' }
+                    };
+                    var c = colorMap[data.color] || colorMap.success;
+
+                    card.style.borderLeft = '3px solid ' + c.text;
+                    card.style.display = 'block';
+
+                    document.getElementById('infoName').textContent = data.name;
+                    document.getElementById('infoPoints').textContent = data.points;
+                    document.getElementById('infoPoints').style.color = c.text;
+                    
+                    var statusEl = document.getElementById('infoStatus');
+                    statusEl.textContent = data.status;
+                    statusEl.style.backgroundColor = c.text;
+                    statusEl.style.color = 'white';
+                })
+                .catch(function() {
+                    card.style.display = 'none';
+                });
+        }
+
+        // Auto-load if old class_id exists (validation error redirect)
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('classSelect').value) {
+                loadClassStudents();
+            }
+        });
+    </script>
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    @endpush
 </x-app-layout>

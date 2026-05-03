@@ -55,9 +55,14 @@
             </div>
             <div style="display: flex; flex-direction: column;">
                 @forelse($tingkatClasses as $kelas)
-                <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; transition: background 200ms;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
+                <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; transition: background 200ms; opacity: {{ $kelas->is_active ? '1' : '0.6' }};" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
                     <div style="flex: 1; min-width: 0; padding-right: 1rem;">
-                        <div style="font-weight: 600; font-size: 0.875rem; color: var(--text);">{{ $kelas->name }}</div>
+                        <div style="font-weight: 600; font-size: 0.875rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem;">
+                            {{ $kelas->name }}
+                            @if(!$kelas->is_active)
+                                <span style="font-size: 0.625rem; font-weight: 700; background: var(--danger-light); color: var(--danger); padding: 0.125rem 0.375rem; border-radius: 4px; line-height: 1;">NONAKTIF</span>
+                            @endif
+                        </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         <div style="text-align: right;">
@@ -65,12 +70,18 @@
                             <div style="font-size: 0.625rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Siswa</div>
                         </div>
                         <div style="display: flex; gap: 0.25rem;">
-                            <button onclick="openEditModal({{ $kelas->id }}, '{{ addslashes($kelas->name) }}', '{{ $kelas->tingkat }}')" style="background: var(--primary-light); color: var(--primary); border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)';this.style.color='white'" onmouseout="this.style.background='var(--primary-light)';this.style.color='var(--primary)'">
+                            <form action="{{ route('classes.toggleStatus', $kelas) }}" method="POST">
+                                @csrf @method('PATCH')
+                                <button type="submit" style="background: {{ $kelas->is_active ? 'var(--border-light)' : 'var(--success-light)' }}; color: {{ $kelas->is_active ? 'var(--text-muted)' : 'var(--success)' }}; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='{{ $kelas->is_active ? 'var(--text-secondary)' : 'var(--success)' }}';this.style.color='white'" onmouseout="this.style.background='{{ $kelas->is_active ? 'var(--border-light)' : 'var(--success-light)' }}';this.style.color='{{ $kelas->is_active ? 'var(--text-muted)' : 'var(--success)' }}'" title="{{ $kelas->is_active ? 'Nonaktifkan Kelas' : 'Aktifkan Kelas' }}">
+                                    <i data-lucide="{{ $kelas->is_active ? 'power-off' : 'power' }}" size="14"></i>
+                                </button>
+                            </form>
+                            <button onclick="openEditModal({{ $kelas->id }}, '{{ addslashes($kelas->name) }}', '{{ $kelas->tingkat }}')" style="background: var(--primary-light); color: var(--primary); border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)';this.style.color='white'" onmouseout="this.style.background='var(--primary-light)';this.style.color='var(--primary)'" title="Edit Kelas">
                                 <i data-lucide="pencil" size="14"></i>
                             </button>
                             <form action="{{ route('classes.destroy', $kelas) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus kelas {{ $kelas->name }}?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" style="background: var(--danger-light); color: var(--danger); border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--danger)';this.style.color='white'" onmouseout="this.style.background='var(--danger-light)';this.style.color='var(--danger)'">
+                                <button type="submit" style="background: var(--danger-light); color: var(--danger); border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--danger)';this.style.color='white'" onmouseout="this.style.background='var(--danger-light)';this.style.color='var(--danger)'" title="Hapus Kelas">
                                     <i data-lucide="trash-2" size="14"></i>
                                 </button>
                             </form>
@@ -185,9 +196,9 @@
                         <label class="label">Kelas Asal <span style="color: var(--danger);">*</span></label>
                         <select name="source_class_id" id="sourceClass" class="select" required onchange="loadStudents()">
                             <option value="">-- Pilih --</option>
-                            @php $allClasses = App\Models\SchoolClass::orderBy('tingkat')->orderBy('name')->get(); @endphp
-                            @foreach($allClasses as $kls)
-                                <option value="{{ $kls->id }}">{{ $kls->name }}</option>
+                            @php $sourceClasses = App\Models\SchoolClass::orderBy('tingkat')->orderBy('name')->get(); @endphp
+                            @foreach($sourceClasses as $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->name }} {{ !$kls->is_active ? '(NONAKTIF)' : '' }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -198,7 +209,8 @@
                         <label class="label">Kelas Tujuan <span style="color: var(--danger);">*</span></label>
                         <select name="target_class_id" id="targetClass" class="select" required>
                             <option value="">-- Pilih --</option>
-                            @foreach($allClasses as $kls)
+                            @php $targetClasses = App\Models\SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get(); @endphp
+                            @foreach($targetClasses as $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->name }}</option>
                             @endforeach
                         </select>

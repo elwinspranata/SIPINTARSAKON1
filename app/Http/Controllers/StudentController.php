@@ -27,14 +27,14 @@ class StudentController extends Controller
         }
 
         $students = $query->orderBy('name')->paginate(15)->withQueryString();
-        $classes = SchoolClass::orderBy('name')->get();
+        $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
 
         return view('students.index', compact('students', 'classes'));
     }
 
     public function create()
     {
-        $classes = SchoolClass::orderBy('name')->get();
+        $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
         return view('students.create', compact('classes'));
     }
 
@@ -64,7 +64,7 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        $classes = SchoolClass::orderBy('name')->get();
+        $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
         return view('students.edit', compact('student', 'classes'));
     }
 
@@ -86,5 +86,42 @@ class StudentController extends Controller
     {
         $student->delete();
         return redirect()->route('students.index')->with('success', 'Siswa berhasil dihapus!');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'exists:students,id',
+        ]);
+
+        Student::whereIn('id', $request->ids)->delete();
+
+        return redirect()->route('students.index')->with('success', count($request->ids) . ' siswa berhasil dihapus!');
+    }
+
+    /**
+     * Get student points (JSON for AJAX).
+     */
+    public function getPoints(Student $student)
+    {
+        $student->load(['behaviorRecords.violationType', 'behaviorRecords.vitaminType']);
+        $vPoints = $student->behaviorRecords->whereNotNull('violation_type_id')->sum(fn($r) => $r->violationType->points ?? 0);
+        $aPoints = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sum(fn($r) => $r->vitaminType->points ?? 0);
+        $points = max(0, $vPoints - $aPoints);
+
+        if ($points > 100) { $status = 'KRITIS'; $color = 'danger'; }
+        elseif ($points > 50) { $status = 'WASPADA'; $color = 'warning'; }
+        elseif ($points > 20) { $status = 'BAIK'; $color = 'info'; }
+        else { $status = 'AMAN'; $color = 'success'; }
+
+        return response()->json([
+            'name' => $student->name,
+            'points' => $points,
+            'violation_points' => $vPoints,
+            'vitamin_points' => $aPoints,
+            'status' => $status,
+            'color' => $color,
+        ]);
     }
 }

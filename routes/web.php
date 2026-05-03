@@ -40,15 +40,18 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+    Route::delete('/students/bulk-delete', [StudentController::class, 'bulkDestroy'])->name('students.bulkDestroy');
     Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
     Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
     Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+    Route::get('/students/{student}/points', [StudentController::class, 'getPoints'])->name('students.points');
 
     // Classes (Kelola Kelas)
     Route::get('/classes', [SchoolClassController::class, 'index'])->name('classes.index');
     Route::post('/classes', [SchoolClassController::class, 'store'])->name('classes.store');
     Route::put('/classes/{schoolClass}', [SchoolClassController::class, 'update'])->name('classes.update');
+    Route::patch('/classes/{schoolClass}/toggle-status', [SchoolClassController::class, 'toggleStatus'])->name('classes.toggleStatus');
     Route::delete('/classes/{schoolClass}', [SchoolClassController::class, 'destroy'])->name('classes.destroy');
     Route::get('/classes/{schoolClass}/students', [SchoolClassController::class, 'getStudents'])->name('classes.students');
     Route::post('/classes/bulk-transfer', [SchoolClassController::class, 'bulkTransfer'])->name('classes.bulkTransfer');

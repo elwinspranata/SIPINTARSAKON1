@@ -29,7 +29,7 @@ class RecordController extends Controller
     public function create()
     {
         $type = request('type', 'violation');
-        $classes = SchoolClass::with('students')->get();
+        $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
         $violation_types = ViolationType::all()->groupBy('category');
         $vitamin_types = VitaminType::all()->groupBy('category');
         
@@ -75,11 +75,10 @@ class RecordController extends Controller
     public function edit(BehaviorRecord $record)
     {
         $record->load(['student', 'violationType', 'vitaminType']);
-        $classes = SchoolClass::with('students')->get();
         $violation_types = ViolationType::all()->groupBy('category');
         $vitamin_types = VitaminType::all()->groupBy('category');
 
-        return view('records.edit', compact('record', 'classes', 'violation_types', 'vitamin_types'));
+        return view('records.edit', compact('record', 'violation_types', 'vitamin_types'));
     }
 
     public function update(Request $request, BehaviorRecord $record)

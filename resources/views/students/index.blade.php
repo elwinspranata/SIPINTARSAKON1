@@ -23,24 +23,41 @@
             <button type="submit" class="btn btn-outline filter-btn">
                 <i data-lucide="search" size="14"></i> Cari
             </button>
-            <span class="filter-count"><strong>{{ $students->total() }}</strong> siswa</span>
+            <span class="filter-count" style="font-size: 0.9375rem; color: var(--text); margin-left: auto;"><strong>{{ $students->total() }}</strong> siswa</span>
         </div>
     </form>
 
     <!-- Table -->
-    <div class="card" style="padding: 0; overflow: hidden;">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Siswa</th>
-                        <th>NISN</th>
-                        <th>Kelas</th>
-                        <th>Poin</th>
-                        <th>Status</th>
-                        <th style="width: 100px;">Aksi</th>
-                    </tr>
-                </thead>
+    <form id="bulkDeleteForm" action="{{ route('students.bulkDestroy') }}" method="POST">
+        @csrf
+        @method('DELETE')
+        
+        <!-- Bulk Action Bar -->
+        <div id="bulkActionBar" style="display: none; background: var(--danger-light); padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; align-items: center; justify-content: space-between; border: 1px solid rgba(255, 77, 77, 0.15); animation: fadeIn 0.2s ease-out;">
+            <div style="font-size: 0.875rem; font-weight: 600; color: var(--danger);">
+                <span id="selectedCount">0</span> siswa terpilih
+            </div>
+            <button type="submit" class="btn" style="background: var(--danger); color: white; padding: 0.5rem 1rem; font-size: 0.8125rem; height: auto;" onclick="return confirm('Hapus permanen semua siswa yang dipilih beserta data perilakunya?')">
+                <i data-lucide="trash-2" size="14"></i> Hapus Terpilih
+            </button>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 40px; text-align: center;">
+                                <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" style="accent-color: var(--primary); cursor: pointer;">
+                            </th>
+                            <th>Siswa</th>
+                            <th>NISN</th>
+                            <th>Kelas</th>
+                            <th>Poin</th>
+                            <th>Status</th>
+                            <th style="width: 100px;">Aksi</th>
+                        </tr>
+                    </thead>
                 <tbody>
                     @forelse($students as $student)
                     @php
@@ -53,6 +70,9 @@
                         else { $sc = 'success'; $st = 'AMAN'; $pc = 'var(--success)'; }
                     @endphp
                     <tr>
+                        <td style="text-align: center;">
+                            <input type="checkbox" name="ids[]" value="{{ $student->id }}" class="student-checkbox" onchange="updateBulkActionUI()" style="accent-color: var(--primary); cursor: pointer;">
+                        </td>
                         <td>
                             <div style="display: flex; align-items: center; gap: 0.75rem;">
                                 <div style="width: 32px; height: 32px; border-radius: var(--radius-sm); background-image: url('https://ui-avatars.com/api/?name={{ urlencode($student->name) }}&background=random&color=fff&size=64'); background-size: cover; flex-shrink: 0;"></div>
@@ -85,7 +105,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">Belum ada data siswa.</td></tr>
+                    <tr><td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">Belum ada data siswa.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -108,4 +128,35 @@
         </div>
         @endif
     </div>
+    </form>
+
+    @push('scripts')
+    <script>
+        function toggleSelectAll(source) {
+            const checkboxes = document.querySelectorAll('.student-checkbox');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+            updateBulkActionUI();
+        }
+
+        function updateBulkActionUI() {
+            const checkedCount = document.querySelectorAll('.student-checkbox:checked').length;
+            const actionBar = document.getElementById('bulkActionBar');
+            const selectedCountSpan = document.getElementById('selectedCount');
+            
+            if (checkedCount > 0) {
+                actionBar.style.display = 'flex';
+                selectedCountSpan.textContent = checkedCount;
+            } else {
+                actionBar.style.display = 'none';
+                document.getElementById('selectAllCheckbox').checked = false;
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    @endpush
 </x-app-layout>

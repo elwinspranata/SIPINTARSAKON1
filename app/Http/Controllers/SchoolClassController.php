@@ -10,7 +10,7 @@ class SchoolClassController extends Controller
 {
     public function index()
     {
-        $classes = SchoolClass::withCount('students')->orderBy('tingkat')->orderBy('name')->get()->groupBy('tingkat');
+        $classes = SchoolClass::withCount('students')->orderBy('tingkat')->orderByDesc('is_active')->orderBy('name')->get()->groupBy('tingkat');
         $totalClasses = SchoolClass::count();
         $totalStudents = Student::count();
 
@@ -87,5 +87,12 @@ class SchoolClassController extends Controller
 
         return redirect()->route('classes.index')
             ->with('success', "{$count} siswa berhasil dipindahkan ke kelas {$targetClass->name}!");
+    }
+    public function toggleStatus(SchoolClass $schoolClass)
+    {
+        $schoolClass->update(['is_active' => !$schoolClass->is_active]);
+        
+        $status = $schoolClass->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        return redirect()->route('classes.index')->with('success', "Kelas {$schoolClass->name} berhasil {$status}!");
     }
 }
