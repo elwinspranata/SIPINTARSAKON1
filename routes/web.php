@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ViolationTypeController;
 use App\Http\Controllers\Admin\VitaminTypeController;
@@ -43,6 +44,14 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
     Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+
+    // Classes (Kelola Kelas)
+    Route::get('/classes', [SchoolClassController::class, 'index'])->name('classes.index');
+    Route::post('/classes', [SchoolClassController::class, 'store'])->name('classes.store');
+    Route::put('/classes/{schoolClass}', [SchoolClassController::class, 'update'])->name('classes.update');
+    Route::delete('/classes/{schoolClass}', [SchoolClassController::class, 'destroy'])->name('classes.destroy');
+    Route::get('/classes/{schoolClass}/students', [SchoolClassController::class, 'getStudents'])->name('classes.students');
+    Route::post('/classes/bulk-transfer', [SchoolClassController::class, 'bulkTransfer'])->name('classes.bulkTransfer');
 
     // Admin routes
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {

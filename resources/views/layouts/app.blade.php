@@ -73,6 +73,11 @@
                     <i data-lucide="users" size="18"></i>
                     <span>Data Siswa</span>
                 </a>
+
+                <a href="{{ route('classes.index') }}" class="nav-link {{ request()->routeIs('classes.*') ? 'active' : '' }}">
+                    <i data-lucide="school" size="18"></i>
+                    <span>Data Kelas</span>
+                </a>
                 
                 <a href="{{ route('records.create', ['type' => 'violation']) }}" class="nav-link {{ request()->is('records/create*') && request('type', 'violation') == 'violation' ? 'active' : '' }}">
                     <i data-lucide="stethoscope" size="18"></i>
@@ -142,10 +147,12 @@
                         <i data-lucide="bell" size="18"></i>
                         <span class="notification-badge-pulse"></span>
                     </div>
+                    @unless(request()->routeIs('classes.*'))
                     <a href="{{ route('records.create') }}" class="btn btn-primary" style="padding: 0.6rem 1.25rem;">
                         <i data-lucide="plus-circle" size="18"></i>
                         <span>Input Cepat</span>
                     </a>
+                    @endunless
                 </div>
             </header>
 
