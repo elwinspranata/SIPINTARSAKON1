@@ -91,9 +91,13 @@
 
                 @can('admin')
                 <div class="nav-section-title">Admin</div>
-                <a href="{{ route('admin.violations') }}" class="nav-link {{ request()->routeIs('admin.violations') ? 'active' : '' }}">
-                    <i data-lucide="shield-check" size="18"></i>
-                    <span>Master Data</span>
+                <a href="{{ route('admin.violation-types.index') }}" class="nav-link {{ request()->routeIs('admin.violation-types.*') ? 'active' : '' }}">
+                    <i data-lucide="shield-alert" size="18"></i>
+                    <span>Kelola Pelanggaran</span>
+                </a>
+                <a href="{{ route('admin.vitamin-types.index') }}" class="nav-link {{ request()->routeIs('admin.vitamin-types.*') ? 'active' : '' }}">
+                    <i data-lucide="sparkles" size="18"></i>
+                    <span>Kelola Vitamin</span>
                 </a>
                 @endcan
             </nav>

@@ -4,6 +4,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ViolationTypeController;
+use App\Http\Controllers\Admin\VitaminTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,8 +33,18 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
 
     // Admin routes
-    Route::middleware(['can:admin'])->group(function () {
-        Route::get('/admin/violations', [DashboardController::class, 'violations'])->name('admin.violations');
+    Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
+        // Jenis Pelanggaran (Penyakit)
+        Route::get('/violation-types', [ViolationTypeController::class, 'index'])->name('violation-types.index');
+        Route::post('/violation-types', [ViolationTypeController::class, 'store'])->name('violation-types.store');
+        Route::put('/violation-types/{violationType}', [ViolationTypeController::class, 'update'])->name('violation-types.update');
+        Route::delete('/violation-types/{violationType}', [ViolationTypeController::class, 'destroy'])->name('violation-types.destroy');
+
+        // Kategori Vitamin
+        Route::get('/vitamin-types', [VitaminTypeController::class, 'index'])->name('vitamin-types.index');
+        Route::post('/vitamin-types', [VitaminTypeController::class, 'store'])->name('vitamin-types.store');
+        Route::put('/vitamin-types/{vitaminType}', [VitaminTypeController::class, 'update'])->name('vitamin-types.update');
+        Route::delete('/vitamin-types/{vitaminType}', [VitaminTypeController::class, 'destroy'])->name('vitamin-types.destroy');
     });
 
     // Profile routes
@@ -42,3 +54,4 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+

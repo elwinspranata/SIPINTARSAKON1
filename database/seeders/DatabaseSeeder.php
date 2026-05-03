@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ViolationTypeSeeder::class,
+            VitaminTypeSeeder::class,
         ]);
 
         // Admin User

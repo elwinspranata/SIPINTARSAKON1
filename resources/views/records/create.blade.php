@@ -36,6 +36,7 @@
 
                 <div class="form-group">
                     <label class="label">{{ $isViolation ? 'Jenis Pelanggaran' : 'Kategori Vitamin' }} <span style="color: var(--danger);">*</span></label>
+                    @if($isViolation)
                     <select name="violation_type_id" class="select" required>
                         <option value="">-- Pilih --</option>
                         @foreach($violation_types as $category => $types)
@@ -46,6 +47,18 @@
                             </optgroup>
                         @endforeach
                     </select>
+                    @else
+                    <select name="vitamin_type_id" class="select" required>
+                        <option value="">-- Pilih --</option>
+                        @foreach($vitamin_types as $category => $types)
+                            <optgroup label="{{ $category }}">
+                                @foreach($types as $vt)
+                                    <option value="{{ $vt->id }}" {{ old('vitamin_type_id') == $vt->id ? 'selected' : '' }}>{{ $vt->name }} (+{{ $vt->points }} Poin)</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                    @endif
                 </div>
 
                 <div class="form-group">

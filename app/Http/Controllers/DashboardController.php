@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\HealthRecord;
 use App\Models\BehaviorRecord;
-use App\Models\ViolationType;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -31,10 +30,5 @@ class DashboardController extends Controller
 
         return view('dashboard', compact('stats', 'recent_violations', 'recent_health'));
     }
-
-    public function violations()
-    {
-        $violations = ViolationType::all()->groupBy('category');
-        return view('admin.violations', compact('violations'));
-    }
 }
+
