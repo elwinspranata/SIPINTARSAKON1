@@ -296,6 +296,13 @@ svg {
 }
 
 /* ======== CARDS ======== */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    animation: fadeInUp 0.4s ease-out;
+}
+
 .card {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
@@ -601,6 +608,7 @@ table {
 
 @media (max-width: 992px) {
     .dashboard-grid { grid-template-columns: 1fr !important; }
+    .profile-grid { grid-template-columns: 1fr !important; }
 }
 
 @media (max-width: 768px) {

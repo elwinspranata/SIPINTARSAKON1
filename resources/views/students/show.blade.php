@@ -28,7 +28,7 @@
         else { $st = 'AMAN'; $sc = 'success'; $pc = '#10b981'; $bgc = '#ecfdf5'; }
     @endphp
 
-    <div style="display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; animation: fadeInUp 0.4s ease-out;">
+    <div class="profile-grid">
         <!-- Left Column: Profile & Summary -->
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <!-- Profile Card -->
