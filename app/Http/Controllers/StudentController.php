@@ -55,11 +55,8 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $student->load(['schoolClass', 'behaviorRecords.violationType', 'behaviorRecords.vitaminType', 'behaviorRecords.user']);
-        $totalViolation = $student->behaviorRecords->whereNotNull('violation_type_id')->sum(fn($r) => $r->violationType->points ?? 0);
-        $totalVitamin = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sum(fn($r) => $r->vitaminType->points ?? 0);
-        $totalPoints = max(0, $totalViolation - $totalVitamin);
-
-        return view('students.show', compact('student', 'totalPoints'));
+        $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
+        return view('students.show', compact('student', 'classes'));
     }
 
     public function edit(Student $student)
