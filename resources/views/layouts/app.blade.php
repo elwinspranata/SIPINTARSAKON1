@@ -126,10 +126,11 @@
                     </button>
                     <div>
                         <h1 class="page-title">@yield('header_title', 'Dashboard')</h1>
-                    <div class="header-meta" style="display: flex; align-items: center; gap: 0.75rem; margin-top: 4px;">
-                        <span class="motto-tag">Sehat Karakternya, Pintar Orangnya</span>
-                        <span class="header-separator" style="color: var(--text-muted); opacity: 0.3;">|</span>
-                        <span class="header-subtitle">@yield('header_subtitle', 'Sistem Pembinaan Integritas Terpadu')</span>
+                        <div class="header-meta" style="display: flex; align-items: center; gap: 0.75rem; margin-top: 4px;">
+                            <span class="motto-tag">Sehat Karakternya, Pintar Orangnya</span>
+                            <span class="header-separator" style="color: var(--text-muted); opacity: 0.3;">|</span>
+                            <span class="header-subtitle">@yield('header_subtitle', 'Sistem Pembinaan Integritas Terpadu')</span>
+                        </div>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -157,30 +158,6 @@
         </main>
     </div>
 
-    <!-- Mobile Navigation -->
-    <nav class="mobile-nav">
-        <a href="{{ route('dashboard') }}" class="mobile-nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <i data-lucide="layout-dashboard"></i>
-            <span>Beranda</span>
-        </a>
-        <a href="{{ route('students.index') }}" class="mobile-nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}">
-            <i data-lucide="users"></i>
-            <span>Siswa</span>
-        </a>
-        <a href="{{ route('records.create') }}" class="mobile-nav-link">
-            <div style="background: var(--primary); color: white; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-top: -32px; box-shadow: 0 8px 20px rgba(27, 107, 58, 0.4); border: 3px solid white;">
-                <i data-lucide="plus"></i>
-            </div>
-        </a>
-        <a href="{{ route('records.index') }}" class="mobile-nav-link {{ request()->routeIs('records.index') ? 'active' : '' }}">
-            <i data-lucide="clipboard-list"></i>
-            <span>Laporan</span>
-        </a>
-        <a href="#" onclick="document.getElementById('logout-form').submit()" class="mobile-nav-link">
-            <i data-lucide="log-out"></i>
-            <span>Keluar</span>
-        </a>
-    </nav>
 
     <script>
         lucide.createIcons();
