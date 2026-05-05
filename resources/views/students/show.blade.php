@@ -2,6 +2,11 @@
     @section('header_title', $student->name)
     @section('header_subtitle', 'Detail profil akademik dan rekam jejak kedisiplinan siswa.')
     @section('header_actions')
+        <a href="{{ route('students.letter', $student) }}" target="_blank"
+           class="btn"
+           style="background: #1B6B3A; color: white; box-shadow: 0 8px 16px -4px rgba(27,107,58,0.3); border-radius: 12px;">
+            <i data-lucide="file-text" style="width:14px;height:14px;"></i> Download Surat
+        </a>
         <button onclick="openEditStudentModal({{ $student->id }}, '{{ addslashes($student->name) }}', '{{ $student->nisn }}', '{{ $student->class_id }}', '{{ $student->gender }}')" class="btn btn-outline" style="border-radius: 12px; border-color: #d97706; color: #d97706;">
             <i data-lucide="pencil" style="width: 14px; height: 14px;"></i> Edit Profil
         </button>
@@ -69,6 +74,7 @@
                 <h4 style="font-size: 0.875rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
                     <i data-lucide="calculator" style="width: 18px; height: 18px; color: var(--primary);"></i> Ringkasan Poin
                 </h4>
+<<<<<<< Updated upstream
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 0.6rem;">
@@ -83,6 +89,22 @@
                             <span style="font-size: 0.8125rem; font-weight: 700; color: var(--text-secondary);">Total Vitamin</span>
                         </div>
                         <span style="font-weight: 800; color: #10b981;">-{{ $totalVitamin }}</span>
+=======
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8125rem;">
+                        <span style="color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--danger);"></span>
+                            Poin Penyakit
+                        </span>
+                        <span style="font-weight: 700; color: var(--danger);">-{{ $totalViolation }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8125rem;">
+                        <span style="color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></span>
+                            Poin Vitamin
+                        </span>
+                        <span style="font-weight: 700; color: var(--success);">+{{ $totalVitamin }}</span>
+>>>>>>> Stashed changes
                     </div>
                     <div style="height: 1px; background: var(--border-light); margin: 0.25rem 0;"></div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -133,12 +155,16 @@
                             <div style="font-size: 0.625rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Poin</div>
                         </div>
                     </div>
+<<<<<<< Updated upstream
                     @empty
                     <div style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
                         <i data-lucide="check-circle-2" style="width: 48px; height: 48px; opacity: 0.1; margin-bottom: 1rem;"></i>
                         <p style="font-weight: 700; font-size: 0.875rem;">Siswa berkelakuan sangat baik. Belum ada catatan penyakit.</p>
                     </div>
                     @endforelse
+=======
+                    <span style="font-weight: 700; color: var(--danger); font-size: 0.875rem; white-space: nowrap;">-{{ $record->violationType->points ?? 0 }}</span>
+>>>>>>> Stashed changes
                 </div>
             </div>
 
@@ -171,12 +197,16 @@
                             <div style="font-size: 0.625rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Poin</div>
                         </div>
                     </div>
+<<<<<<< Updated upstream
                     @empty
                     <div style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
                         <i data-lucide="award" style="width: 48px; height: 48px; opacity: 0.1; margin-bottom: 1rem;"></i>
                         <p style="font-weight: 700; font-size: 0.875rem;">Belum ada catatan vitamin/prestasi untuk siswa ini.</p>
                     </div>
                     @endforelse
+=======
+                    <span style="font-weight: 700; color: var(--success); font-size: 0.875rem; white-space: nowrap;">+{{ $record->vitaminType->points ?? 0 }}</span>
+>>>>>>> Stashed changes
                 </div>
             </div>
         </div>

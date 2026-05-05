@@ -46,6 +46,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
     Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
     Route::get('/students/{student}/points', [StudentController::class, 'getPoints'])->name('students.points');
+    Route::get('/students/{student}/letter', [StudentController::class, 'letter'])->name('students.letter');
 
     // Classes (Kelola Kelas)
     Route::get('/classes', [SchoolClassController::class, 'index'])->name('classes.index');

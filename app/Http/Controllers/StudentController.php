@@ -121,4 +121,40 @@ class StudentController extends Controller
             'color' => $color,
         ]);
     }
+
+    /**
+     * Show printable letter for student.
+     */
+    public function letter(Student $student)
+    {
+        $student->load(['schoolClass', 'behaviorRecords.violationType', 'behaviorRecords.vitaminType', 'behaviorRecords.user']);
+
+        $violationRecords = $student->behaviorRecords->whereNotNull('violation_type_id')->sortByDesc('date');
+        $vitaminRecords   = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sortByDesc('date');
+
+        $totalViolation = $violationRecords->sum(fn($r) => $r->violationType->points ?? 0);
+        $totalVitamin   = $vitaminRecords->sum(fn($r) => $r->vitaminType->points ?? 0);
+        $netPoints      = $totalViolation - $totalVitamin;  // bisa negatif jika vitamin > penyakit
+        $netDisplay     = max(0, $netPoints);               // tampilan poin bersih tidak boleh negatif
+
+        if ($netDisplay > 100)     { $statusText = 'ZONA MERAH — KRITIS';   $statusSP = 'SP III'; }
+        elseif ($netDisplay > 50)  { $statusText = 'ZONA KUNING — WASPADA'; $statusSP = 'SP II'; }
+        elseif ($netDisplay > 20)  { $statusText = 'ZONA BIRU — PERHATIAN'; $statusSP = 'SP I'; }
+        else                       { $statusText = 'ZONA HIJAU — AMAN';      $statusSP = 'Normal'; }
+
+        // Generate nomor surat: SP/SIPINTAR/[ID]/[BULAN-ROMAWI]/[TAHUN]
+        $bulanRomawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+        $nomorSurat  = sprintf(
+            '%03d/SP-SIPINTAR/%s/%s',
+            $student->id,
+            $bulanRomawi[now()->month - 1],
+            now()->year
+        );
+
+        return view('students.letter', compact(
+            'student', 'violationRecords', 'vitaminRecords',
+            'totalViolation', 'totalVitamin', 'netPoints', 'netDisplay',
+            'statusText', 'statusSP', 'nomorSurat'
+        ));
+    }
 }

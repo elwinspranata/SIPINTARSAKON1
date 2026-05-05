@@ -13,8 +13,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        .logo-text-si { color: #00D26A; font-weight: 900; }
-        .logo-text-pintar { color: #2B5EA7; font-weight: 900; }
+        .logo-text-si { color: #22c55e; font-weight: 900; }
+        .logo-text-pintar { color: #1B6B3A; font-weight: 900; }
         
         .notification-badge-pulse {
             position: absolute;
@@ -116,7 +116,7 @@
             </nav>
 
             <div class="user-profile-mini">
-                <div class="user-avatar" style="background-image: url('https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=2B5EA7&color=fff&bold=true&size=80'); background-size: cover;"></div>
+                <div class="user-avatar" style="background-image: url('https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=1B6B3A&color=fff&bold=true&size=80'); background-size: cover;"></div>
                 <div class="user-info-text">
                     <div class="user-name">{{ auth()->user()->name }}</div>
                     <div class="user-role">{{ ucfirst(auth()->user()->role ?? 'Guru') }}</div>
@@ -180,7 +180,7 @@
             <span>Siswa</span>
         </a>
         <a href="{{ route('records.create') }}" class="mobile-nav-link">
-            <div style="background: var(--primary); color: white; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-top: -32px; box-shadow: 0 8px 20px rgba(43, 94, 167, 0.4); border: 3px solid white;">
+            <div style="background: var(--primary); color: white; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-top: -32px; box-shadow: 0 8px 20px rgba(27, 107, 58, 0.4); border: 3px solid white;">
                 <i data-lucide="plus"></i>
             </div>
         </a>
