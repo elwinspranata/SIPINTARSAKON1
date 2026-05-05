@@ -28,29 +28,29 @@
                 <div class="form-group">
                     @if($isVitamin)
                         <label class="label">Kategori Vitamin <span style="color: var(--danger);">*</span></label>
-                        <select name="vitamin_type_id" class="select" required>
+                        <select name="category" id="categorySelect" class="select" required onchange="loadTypes()">
+                            <option value="">-- Pilih Kategori --</option>
                             @foreach($vitamin_types as $category => $types)
-                                <optgroup label="{{ $category }}">
-                                    @foreach($types as $vt)
-                                        <option value="{{ $vt->id }}" {{ $record->vitamin_type_id == $vt->id ? 'selected' : '' }}>
-                                            {{ $vt->name }} (+{{ $vt->points }} Poin)
-                                        </option>
-                                    @endforeach
-                                </optgroup>
+                                <option value="{{ $category }}" {{ ($record->vitaminType->category ?? '') == $category ? 'selected' : '' }}>{{ $category }}</option>
                             @endforeach
                         </select>
+                        
+                        <label class="label" style="margin-top: 1rem;">Jenis Vitamin <span style="color: var(--danger);">*</span></label>
+                        <select name="vitamin_type_id" id="typeSelect" class="select" required>
+                            <option value="">-- Pilih kategori dulu --</option>
+                        </select>
                     @else
-                        <label class="label">Jenis Pelanggaran <span style="color: var(--danger);">*</span></label>
-                        <select name="violation_type_id" class="select" required>
+                        <label class="label">Kategori Pelanggaran <span style="color: var(--danger);">*</span></label>
+                        <select name="category" id="categorySelect" class="select" required onchange="loadTypes()">
+                            <option value="">-- Pilih Kategori --</option>
                             @foreach($violation_types as $category => $types)
-                                <optgroup label="{{ $category }}">
-                                    @foreach($types as $vt)
-                                        <option value="{{ $vt->id }}" {{ $record->violation_type_id == $vt->id ? 'selected' : '' }}>
-                                            {{ $vt->name }} ({{ $vt->points }} Poin)
-                                        </option>
-                                    @endforeach
-                                </optgroup>
+                                <option value="{{ $category }}" {{ ($record->violationType->category ?? '') == $category ? 'selected' : '' }}>{{ $category }}</option>
                             @endforeach
+                        </select>
+
+                        <label class="label" style="margin-top: 1rem;">Jenis Pelanggaran <span style="color: var(--danger);">*</span></label>
+                        <select name="violation_type_id" id="typeSelect" class="select" required>
+                            <option value="">-- Pilih kategori dulu --</option>
                         </select>
                     @endif
                 </div>
@@ -69,4 +69,38 @@
             </form>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        var typesData = @json($isVitamin ? $vitamin_types : $violation_types);
+        var isVitamin = {{ $isVitamin ? 'true' : 'false' }};
+        var oldTypeId = '{{ $record->vitamin_type_id ?? $record->violation_type_id }}';
+
+        function loadTypes() {
+            var category = document.getElementById('categorySelect').value;
+            var typeSelect = document.getElementById('typeSelect');
+            
+            if (!category || !typesData[category]) {
+                typeSelect.disabled = true;
+                typeSelect.innerHTML = '<option value="">-- Pilih kategori dulu --</option>';
+                return;
+            }
+            
+            var types = typesData[category];
+            var html = '<option value="">-- Pilih Jenis --</option>';
+            types.forEach(t => {
+                var selected = oldTypeId == t.id ? ' selected' : '';
+                var pointsText = isVitamin ? `(+${t.points} Poin)` : `(${t.points} Poin)`;
+                html += `<option value="${t.id}"${selected}>${t.name} ${pointsText}</option>`;
+            });
+            
+            typeSelect.innerHTML = html;
+            typeSelect.disabled = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('categorySelect').value) loadTypes();
+        });
+    </script>
+    @endpush
 </x-app-layout>

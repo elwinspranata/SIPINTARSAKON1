@@ -51,28 +51,24 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="label" style="font-weight: 700; color: var(--primary-dark);">{{ $isViolation ? 'Kategori Pelanggaran' : 'Kategori Vitamin' }}</label>
-                    <select name="{{ $isViolation ? 'violation_type_id' : 'vitamin_type_id' }}" class="select" required style="height: 48px;">
-                        <option value="">-- Pilih Jenis --</option>
-                        @if($isViolation)
-                            @foreach($violation_types as $category => $types)
-                                <optgroup label="{{ $category }}">
-                                    @foreach($types as $vt)
-                                        <option value="{{ $vt->id }}" {{ old('violation_type_id') == $vt->id ? 'selected' : '' }}>{{ $vt->name }} ({{ $vt->points }} Poin)</option>
-                                    @endforeach
-                                </optgroup>
+                <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="label" style="font-weight: 700; color: var(--primary-dark);">Kategori {{ $isViolation ? 'Pelanggaran' : 'Vitamin' }}</label>
+                        <select name="category" id="categorySelect" class="select" required onchange="loadTypes()" style="height: 48px;">
+                            <option value="">-- Pilih Kategori --</option>
+                            @php $typesGroup = $isViolation ? $violation_types : $vitamin_types; @endphp
+                            @foreach($typesGroup as $category => $types)
+                                <option value="{{ $category }}" {{ old('category') == $category ? 'selected' : '' }}>{{ $category }}</option>
                             @endforeach
-                        @else
-                            @foreach($vitamin_types as $category => $types)
-                                <optgroup label="{{ $category }}">
-                                    @foreach($types as $vt)
-                                        <option value="{{ $vt->id }}" {{ old('vitamin_type_id') == $vt->id ? 'selected' : '' }}>{{ $vt->name }} (+{{ $vt->points }} Poin)</option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        @endif
-                    </select>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label" style="font-weight: 700; color: var(--primary-dark);">Jenis {{ $isViolation ? 'Pelanggaran' : 'Vitamin' }}</label>
+                        <select name="{{ $isViolation ? 'violation_type_id' : 'vitamin_type_id' }}" id="typeSelect" class="select" required disabled style="height: 48px;">
+                            <option value="">-- Pilih kategori dulu --</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -176,6 +172,31 @@
     @push('scripts')
     <script>
         var oldStudentId = '{{ old('student_id') }}';
+        var typesData = @json($isViolation ? $violation_types : $vitamin_types);
+        var isViolation = {{ $isViolation ? 'true' : 'false' }};
+        var oldTypeId = '{{ old($isViolation ? 'violation_type_id' : 'vitamin_type_id') }}';
+
+        function loadTypes() {
+            var category = document.getElementById('categorySelect').value;
+            var typeSelect = document.getElementById('typeSelect');
+            
+            if (!category || !typesData[category]) {
+                typeSelect.disabled = true;
+                typeSelect.innerHTML = '<option value="">-- Pilih kategori dulu --</option>';
+                return;
+            }
+            
+            var types = typesData[category];
+            var html = '<option value="">-- Pilih Jenis --</option>';
+            types.forEach(t => {
+                var selected = oldTypeId == t.id ? ' selected' : '';
+                var pointsText = isViolation ? `(${t.points} Poin)` : `(+${t.points} Poin)`;
+                html += `<option value="${t.id}"${selected}>${t.name} ${pointsText}</option>`;
+            });
+            
+            typeSelect.innerHTML = html;
+            typeSelect.disabled = false;
+        }
 
         function loadClassStudents() {
             var classId = document.getElementById('classSelect').value;
@@ -261,6 +282,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             if (document.getElementById('classSelect').value) loadClassStudents();
+            if (document.getElementById('categorySelect').value) loadTypes();
         });
     </script>
     <style>

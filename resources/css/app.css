@@ -587,6 +587,102 @@ tbody tr:last-child td { border-bottom: none; }
     box-shadow: 0 0 0 4px var(--primary-glow);
 }
 
+/* ======== TOM SELECT CUSTOMIZATION ======== */
+.ts-wrapper {
+    width: 100%;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+.ts-wrapper.single .ts-control {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231e293b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.125rem center;
+    padding: 0.875rem 2.5rem 0.875rem 1.125rem !important; /* Space for the arrow */
+    border-radius: var(--radius-md) !important;
+    border: 2px solid #f1f5f9 !important;
+    background-color: #f8fafc !important;
+    transition: all 0.3s var(--ease) !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    min-height: 52px !important;
+}
+.ts-control.focus {
+    border-color: var(--primary) !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 0 4px var(--primary-glow) !important;
+}
+.ts-control > input,
+.ts-control > input::placeholder {
+    font-size: 0.9375rem !important;
+    font-family: inherit !important;
+    color: #000000 !important;
+    opacity: 1 !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+}
+.ts-control .item {
+    font-size: 0.9375rem !important;
+    color: #000000 !important;
+    opacity: 1 !important;
+    font-weight: 500 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    line-height: normal !important;
+}
+.ts-dropdown {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-md) !important;
+    margin-top: 0.5rem !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    padding: 0.5rem !important;
+}
+.ts-dropdown .dropdown-input-wrap {
+    padding: 0 0.5rem 0.5rem 0.5rem !important;
+}
+.ts-dropdown .dropdown-input {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 0.5rem 0.75rem !important;
+    width: 100% !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+    transition: all 0.2s !important;
+}
+.ts-dropdown .dropdown-input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px var(--primary-glow) !important;
+}
+.ts-dropdown .option, .ts-dropdown .optgroup-header {
+    padding: 0.75rem 1rem !important;
+    border-radius: var(--radius-sm) !important;
+    font-size: 0.875rem !important;
+    color: var(--text) !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+}
+.ts-dropdown .option:hover, .ts-dropdown .active {
+    background: var(--primary-light) !important;
+    color: var(--primary) !important;
+    font-weight: 700 !important;
+}
+.ts-dropdown .optgroup-header {
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    color: var(--text-muted) !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.05em !important;
+    padding-top: 1rem !important;
+    padding-bottom: 0.25rem !important;
+}
+
 .table-container {
     width: 100%;
     overflow-x: auto;
