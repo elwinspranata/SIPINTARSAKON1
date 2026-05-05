@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Pemberitahuan — {{ $student->name }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Linux+Libertine&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -72,7 +71,7 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            padding: 20mm 20mm 18mm 25mm;
+            padding: 15mm 20mm 15mm 25mm;
             box-shadow: 0 4px 40px rgba(0,0,0,0.12);
             position: relative;
         }
@@ -82,179 +81,111 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            border-bottom: 3px solid #000;
+            border-bottom: 4px solid #000;
             padding-bottom: 8px;
             margin-bottom: 12px;
+            position: relative;
         }
-        .kop-logo img {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
+        /* Garis tipis di bawah garis tebal kop */
+        .kop::after {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #000;
         }
-        .kop-logo-placeholder {
-            width: 70px;
-            height: 70px;
-            border: 2px solid #1B6B3A;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: #1B6B3A;
-            font-weight: 700;
-            text-align: center;
-        }
+        .logo-kiri { width: 80px; height: 100px; object-fit: contain; }
+        .logo-kanan { width: 80px; height: 100px; object-fit: contain; }
+        
         .kop-text { flex: 1; text-align: center; }
-        .kop-text .instansi  { font-size: 11pt; font-weight: normal; line-height: 1.4; }
-        .kop-text .nama-sma  { font-size: 16pt; font-weight: bold; line-height: 1.2; }
-        .kop-text .alamat    { font-size: 9pt; line-height: 1.5; }
-        .kop-text .web       { font-size: 8.5pt; line-height: 1.4; }
+        .kop-text .provinsi { font-size: 14pt; font-weight: bold; line-height: 1.2; }
+        .kop-text .sma      { font-size: 18pt; font-weight: bold; line-height: 1.2; }
+        .kop-text .alamat   { font-size: 10pt; line-height: 1.4; margin-top: 4px; }
+        .kop-text .kontak   { font-size: 9pt; line-height: 1.4; }
 
         /* Judul */
         .judul-surat {
             text-align: center;
-            margin: 14px 0 4px;
+            margin: 20px 0 10px;
         }
         .judul-surat .judul-utama {
             font-size: 13pt;
             font-weight: bold;
             text-decoration: underline;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .judul-surat .sub-judul   { font-size: 10pt; margin-top: 2px; }
-        .judul-surat .motto       { font-size: 9.5pt; font-style: italic; }
+        .judul-surat .sub-judul   { font-size: 11pt; margin-top: 4px; font-weight: bold; }
+        .judul-surat .motto       { font-size: 10pt; font-style: italic; margin-top: 2px; }
 
         /* Nomor surat */
-        .nomor-surat { margin: 10px 0 14px; font-size: 11pt; }
+        .nomor-surat { margin: 15px 0 20px; font-size: 12pt; }
 
         /* Kepada */
-        .kepada { margin-bottom: 14px; font-size: 11pt; line-height: 1.8; }
+        .kepada { margin-bottom: 20px; font-size: 12pt; line-height: 1.5; }
 
         /* Salam & Body */
-        .salam { font-size: 11pt; margin-bottom: 10px; }
+        .salam { font-size: 12pt; margin-bottom: 12px; font-weight: bold; }
         .body-text {
-            font-size: 11pt;
-            line-height: 1.8;
+            font-size: 12pt;
+            line-height: 1.6;
             text-align: justify;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
-        .body-text p { margin-bottom: 8px; }
+        .body-text p { margin-bottom: 10px; }
 
         /* Tabel */
         .tabel-pelanggaran {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0 6px;
-            font-size: 10.5pt;
+            margin: 15px 0;
+            font-size: 11pt;
         }
         .tabel-pelanggaran th {
-            background: #1B6B3A !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            color: white !important;
-            padding: 6px 8px;
-            border: 1px solid #1B6B3A;
+            padding: 8px;
+            border: 1px solid #000;
             text-align: center;
             font-weight: bold;
         }
         .tabel-pelanggaran td {
-            padding: 5px 8px;
-            border: 1px solid #aaa;
+            padding: 8px;
+            border: 1px solid #000;
         }
-        .tabel-pelanggaran tr:nth-child(even) td { background: #f5fbf7; }
-        .tabel-pelanggaran .poin { text-align: center; font-weight: bold; }
-        .tabel-pelanggaran .no   { text-align: center; }
-        .tabel-pelanggaran tr.total-row td {
-            background: #e8f5ec !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
+        .tabel-pelanggaran .no { text-align: center; }
+        .tabel-pelanggaran .poin { text-align: center; }
 
-        /* Total & Status */
-        .total-box {
-            margin: 8px 0 4px;
-            font-size: 11pt;
-            display: flex;
-            gap: 24px;
-        }
-        .total-item strong { display: inline-block; min-width: 180px; }
+        /* Total */
+        .total-row { font-weight: bold; }
 
+        /* Status */
         .status-box {
-            display: inline-block;
-            margin: 4px 0 10px;
-            padding: 5px 14px;
-            border-radius: 4px;
+            margin: 15px 0;
+            font-size: 12pt;
             font-weight: bold;
-            font-size: 11pt;
-            border: 2px solid;
         }
-        @php
-            $statusColor = match(true) {
-                $netPoints > 100 => ['#dc2626', '#fee2e2'],
-                $netPoints > 50  => ['#d97706', '#fef3c7'],
-                $netPoints > 20  => ['#2563eb', '#dbeafe'],
-                default          => ['#16a34a', '#dcfce7'],
-            };
-        @endphp
 
         /* Undangan */
-        .undangan-box {
-            margin: 10px 0;
-            font-size: 11pt;
-            line-height: 1.8;
-        }
-        .undangan-table { border-collapse: collapse; font-size: 11pt; }
-        .undangan-table td { padding: 1px 6px; vertical-align: top; }
-        .undangan-table td:first-child { white-space: nowrap; min-width: 120px; }
-
-        /* Penutup */
-        .penutup { margin-top: 10px; font-size: 11pt; line-height: 1.8; text-align: justify; }
+        .undangan-table { margin: 15px 0 15px 20px; border-collapse: collapse; font-size: 12pt; }
+        .undangan-table td { padding: 4px 8px; vertical-align: top; }
+        .undangan-table td:first-child { width: 150px; }
 
         /* TTD */
-        .ttd-section {
-            margin-top: 24px;
+        .ttd-container {
+            margin-top: 30px;
+            width: 100%;
+        }
+        .ttd-row {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            font-size: 11pt;
-            gap: 16px;
+            margin-bottom: 30px;
         }
         .ttd-block {
+            width: 45%;
             text-align: center;
-            width: 28%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 8px;
         }
-        .ttd-block .ttd-title {
-            font-weight: bold;
-            min-height: 44px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-            line-height: 1.6;
-        }
-        .ttd-block .ttd-space  { height: 60px; }
-        .ttd-block .ttd-line   { border-top: 1.5px solid #000; padding-top: 5px; }
-        .ttd-block .ttd-name   { font-weight: bold; font-size: 11pt; }
-        .ttd-block .ttd-nip    { font-size: 9.5pt; color: #333; margin-top: 3px; }
-
-        /* Watermark zona merah */
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-35deg);
-            font-size: 72pt;
-            font-weight: 900;
-            opacity: 0.04;
-            pointer-events: none;
-            white-space: nowrap;
-            letter-spacing: 4px;
-        }
+        .ttd-space { height: 70px; }
+        .ttd-name { font-weight: bold; text-decoration: underline; }
 
         /* ===== PRINT ===== */
         @media print {
@@ -265,29 +196,17 @@
                 box-shadow: none;
                 width: 100%;
                 min-height: auto;
-                padding: 0 15mm 15mm 15mm;
-            }
-            .tabel-pelanggaran th {
-                background: #1B6B3A !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                color: white !important;
-            }
-            .tabel-pelanggaran tr.total-row td {
-                background: #e8f5ec !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+                padding: 0;
             }
             @page {
                 size: A4;
-                margin: 15mm 10mm 15mm 10mm;
+                margin: 20mm 15mm 20mm 15mm;
             }
         }
     </style>
 </head>
 <body>
 
-    {{-- Preview Bar (hanya di layar) --}}
     <div class="preview-bar">
         <div>
             <h2>📄 Preview Surat Pemberitahuan</h2>
@@ -304,94 +223,70 @@
     <div class="page-wrapper">
         <div class="surat">
 
-            {{-- Watermark --}}
-            <div class="watermark">SI PINTAR</div>
-
             {{-- ===== KOP SURAT ===== --}}
             <div class="kop">
-                <div class="kop-logo">
-                    @if(file_exists(public_path('logo.png')))
-                        <img src="{{ asset('logo.png') }}" alt="Logo SMAN 1 Kopang">
-                    @else
-                        <div class="kop-logo-placeholder">SMAN 1 KOPANG</div>
-                    @endif
-                </div>
+                <img src="{{ asset('logo_provinsi.png') }}" class="logo-kiri" alt="Logo NTB">
                 <div class="kop-text">
-                    <div class="instansi">PEMERINTAH PROVINSI NUSA TENGGARA BARAT</div>
-                    <div class="nama-sma">SMA NEGERI 1 KOPANG</div>
-                    <div class="alamat">
-                        Jl. Segara Anak No. 5A Kopang Lombok Tengah &nbsp;☎ (0370) 6156250 &nbsp; Kode Pos 83553
-                    </div>
-                    <div class="web">
-                        Laman: www.smansa-kopang.sch.id &nbsp;|&nbsp; Surel: sma_negeri1kopang@yahoo.co.id
-                    </div>
+                    <div class="provinsi">PEMERINTAH PROVINSI NUSA TENGGARA BARAT</div>
+                    <div class="sma">SMA NEGERI 1 KOPANG</div>
+                    <div class="alamat">Jl. Segara Anak No. 5A Kopang Lombok Tengah ((0370) 6156250 Kode Pos 83553</div>
+                    <div class="kontak">Laman: www. smansa-kopang.sch.id Surel: sma_negeri1kopang@yahoo.co.id</div>
                 </div>
+                <img src="{{ asset('logo_sekolah.jpg') }}" class="logo-kanan" alt="Logo Sekolah">
             </div>
 
             {{-- ===== JUDUL ===== --}}
             <div class="judul-surat">
                 <div class="judul-utama">SURAT PEMBERITAHUAN KESEHATAN KARAKTER ({{ Str::upper(explode(' — ', $statusText)[0]) }})</div>
                 <div class="sub-judul">Sistem Pembinaan Integritas Terpadu (Si Pintar)</div>
-                <div class="motto"><em>"Sehat Karakternya, Pintar Orangnya"</em></div>
+                <div class="motto">"Sehat Karakternya , Pintar Orangnya "</div>
             </div>
 
             {{-- ===== NOMOR ===== --}}
             <div class="nomor-surat">
-                Nomor : <strong>{{ $nomorSurat }}</strong>
+                Nomor : ..... / ..... / 202...
             </div>
 
             {{-- ===== KEPADA ===== --}}
             <div class="kepada">
-                Yth.<br>
-                Bapak/Ibu Wali Murid dari: <strong>{{ $student->name }}</strong><br>
-                Kelas: <strong>{{ $student->schoolClass->name ?? '-' }}</strong>
-                &nbsp;&nbsp; | &nbsp;&nbsp; NISN: <strong>{{ $student->nisn ?? '-' }}</strong><br>
-                <br>
-                <em>Di Tempat</em>
+                Yth . Bapak/Ibu Wali Murid dari : <strong>{{ $student->name }}</strong><br>
+                Di Tempat
             </div>
 
             {{-- ===== SALAM ===== --}}
-            <div class="salam"><em>Assalamu'alaikum Warahmatullahi Wabarakatuh</em></div>
+            <div class="salam">Assalamu’alaikum Warahmatullahi Wabarakatuh</div>
 
             {{-- ===== ISI ===== --}}
             <div class="body-text">
                 <p>
-                    Bapak/Ibu yang kami hormati, pendidikan adalah sebuah perjalanan panjang untuk membentuk
-                    insan yang tidak hanya cerdas secara intelektual, tetapi juga sehat secara karakter. Di SMAN 1
-                    Kopang, kami menjalankan program <strong>"Si Pintar"</strong> yang memandang perilaku menyimpang
-                    bukan sebagai kejahatan, melainkan sebagai <em>"penyakit"</em> karakter yang memerlukan
-                    <em>"resep"</em> atau penanganan yang tepat agar siswa dapat kembali pulih dan berkembang
-                    dengan baik.
+                    Bapak/Ibu yang kami hormati , pendidikan adalah sebuah perjalanan panjang untuk membentuk insan yang tidak hanya cerdas secara intelektual , tetapi juga sehat secara karakter . Di SMAN 1 Kopang , kami menjalankan program "Si Pintar" yang memandang perilaku menyimpang bukan sebagai kejahatan , melainkan sebagai " penyakit " karakter yang memerlukan " resep " atau penanganan yang tepat agar siswa dapat kembali pulih dan berkembang dengan baik .
                 </p>
                 <p>
-                    Melalui surat ini, kami ingin menginformasikan hasil pemantauan <strong>Rekam Medis Karakter</strong>
-                    putra/putri Bapak/Ibu. Saat ini, akumulasi poin pelanggaran (gejala) yang bersangkutan telah
-                    mencapai ambang batas yang memerlukan perhatian khusus <strong>({{ explode(' — ', $statusText)[0] }})</strong>.
-                    Berdasarkan mekanisme program, kondisi ini memerlukan kolaborasi erat antara pihak sekolah dan
-                    orang tua agar kami dapat memberikan <em>"resep"</em> pembinaan yang paling sesuai.
+                    Melalui surat ini , kami ingin menginformasikan hasil pemantauan Rekam Medis Karakter putra / putri Bapak/Ibu. Saat ini , akumulasi poin pelanggaran ( gejala ) yang bersangkutan telah mencapai ambang batas yang memerlukan perhatian khusus ({{ explode(' — ', $statusText)[0] }}). Berdasarkan mekanisme program, kondisi ini memerlukan kolaborasi erat antara pihak sekolah dan orang tua agar kami dapat memberikan " resep " pembinaan yang paling sesuai .
+                </p>
+                <p>
+                    Adapun rincian diagnosa perilaku / pelanggaran yang telah tercatat adalah sebagai berikut :
                 </p>
             </div>
 
-            {{-- ===== TABEL PENYAKIT ===== --}}
-            <div class="body-text">
-                <p><strong>Adapun rincian diagnosa perilaku/pelanggaran yang telah tercatat adalah sebagai berikut:</strong></p>
-            </div>
+            {{-- ===== TABEL PELANGGARAN ===== --}}
             <table class="tabel-pelanggaran">
                 <thead>
                     <tr>
-                        <th style="width:35px">NO</th>
-                        <th style="width:110px">Tanggal</th>
-                        <th>Jenis Pelanggaran (Diagnosa)</th>
-                        <th style="width:130px">Bobot Point (Gejala)</th>
+                        <th style="width: 40px;">NO</th>
+                        <th style="width: 120px;">Tanggal</th>
+                        <th>Jenis Pelanggaran ( Diagnosa )</th>
+                        <th style="width: 150px;">Bobot Point ( Gejala )</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($violationRecords as $i => $record)
+                    @php $i = 1; @endphp
+                    @forelse($violationRecords as $record)
                     <tr>
-                        <td class="no">{{ $i + 1 }}</td>
-                        <td>{{ \Carbon\Carbon::parse($record->date)->translatedFormat('d M Y') }}</td>
+                        <td class="no">{{ $i++ }}</td>
+                        <td>{{ \Carbon\Carbon::parse($record->date)->translatedFormat('d F Y') }}</td>
                         <td>{{ $record->violationType->name ?? '-' }}</td>
-                        <td class="poin" style="color: #dc2626;">-{{ $record->violationType->points ?? 0 }}</td>
+                        <td class="poin">{{ $record->violationType->points ?? 0 }}</td>
                     </tr>
                     @empty
                     <tr>
@@ -400,117 +295,34 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr>
-                        <td class="no">2</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
                     @endforelse
                     <tr class="total-row">
-                        <td colspan="3" style="text-align: right; font-weight: bold; padding-right: 12px;">Total Akumulasi Point</td>
-                        <td class="poin" style="font-weight: bold;">{{ $totalViolation }}</td>
+                        <td colspan="3" style="text-align: right; padding-right: 15px;">Total Akumulasi Point</td>
+                        <td class="poin">{{ $totalViolation }}</td>
                     </tr>
                 </tbody>
             </table>
 
-            {{-- ===== TABEL VITAMIN ===== --}}
-            <div class="body-text" style="margin-top: 12px;">
-                <p><strong>Adapun rincian vitamin/prestasi/kebaikan yang telah tercatat adalah sebagai berikut:</strong></p>
-            </div>
-            <table class="tabel-pelanggaran">
-                <thead>
-                    <tr>
-                        <th style="width:35px">NO</th>
-                        <th style="width:110px">Tanggal</th>
-                        <th>Jenis Vitamin / Prestasi (Diagnosa)</th>
-                        <th style="width:130px">Bobot Point (Gejala)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($vitaminRecords as $i => $record)
-                    <tr>
-                        <td class="no">{{ $i + 1 }}</td>
-                        <td>{{ \Carbon\Carbon::parse($record->date)->translatedFormat('d M Y') }}</td>
-                        <td>{{ $record->vitaminType->name ?? '-' }}</td>
-                        <td class="poin" style="color: #16a34a;">+{{ $record->vitaminType->points ?? 0 }}</td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td class="no">1</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="no">2</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    @endforelse
-                    <tr class="total-row">
-                        <td colspan="3" style="text-align: right; font-weight: bold; padding-right: 12px;">Total Akumulasi Point</td>
-                        <td class="poin" style="font-weight: bold;">{{ $totalVitamin }}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            {{-- ===== TOTAL & STATUS ===== --}}
-            <div style="margin-top: 12px; font-size: 11pt; line-height: 2;">
-                <table style="font-size: 11pt; border-collapse: collapse;">
-                    <tr>
-                        <td style="min-width: 240px;">Total Poin Penyakit</td>
-                        <td>: <strong style="color: #dc2626;">{{ $totalViolation }} poin</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Total Poin Vitamin (pengurang)</td>
-                        <td>: <strong style="color: #16a34a;">{{ $totalVitamin }} poin</strong></td>
-                    </tr>
-                    <tr style="border-top: 1px solid #000;">
-                        <td><strong>Total Akumulasi Poin Bersih</strong></td>
-                        <td>: <strong>{{ $netDisplay }} poin</strong>
-                            @if($netPoints < 0)
-                                <span style="font-size:9.5pt; color:#16a34a;"> (vitamin melebihi penyakit)</span>
-                            @endif
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Status Saat Ini</strong></td>
-                        <td>: <strong>{{ $statusText }}</strong> ({{ $statusSP }})</td>
-                    </tr>
-                </table>
-            </div>
-
-
-            {{-- ===== GRAFIK TREN PERILAKU ===== --}}
-            <div style="margin-top: 24px; margin-bottom: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                    <div>
-                        <div style="font-size: 11pt; font-weight: bold; display: flex; align-items: center; gap: 6px;">
-                            <span>📈 Tren Perilaku Siswa</span>
-                        </div>
-                        <div style="font-size: 9pt; color: #64748b; margin-top: 2px;">Perbandingan vitamin vs penyakit (6 bulan terakhir)</div>
-                    </div>
-                    <div style="display: flex; gap: 12px; font-size: 9pt; font-weight: bold; background: #f8fafc; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0; align-items: center;">
-                        <span style="display: flex; align-items: center; gap: 6px; color: #334155;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Vitamin</span>
-                        <span style="display: flex; align-items: center; gap: 6px; color: #334155; margin-left: 8px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Penyakit</span>
-                    </div>
-                </div>
-                <div style="height: 180px; width: 100%; position: relative;">
+            {{-- ===== GRAFIK ===== --}}
+            <div style="margin: 20px 0;">
+                <p style="font-weight: bold; margin-bottom: 10px;">Berikut trend grafik perilaku siswa :</p>
+                <div style="height: 200px; width: 100%;">
                     <canvas id="behaviorChart"></canvas>
                 </div>
             </div>
 
-            {{-- ===== UNDANGAN ===== --}}
-            <div class="body-text" style="margin-top: 12px;">
-                <p>
-                    Sehubungan dengan hal tersebut, kami mengundang Bapak/Ibu untuk hadir pada:
-                </p>
+            {{-- ===== STATUS ===== --}}
+            <div class="status-box">
+                Status Saat ini : {{ $statusSP }} .
             </div>
-            <table class="undangan-table" style="margin-left: 20px; margin-bottom: 10px;">
+
+            {{-- ===== UNDANGAN ===== --}}
+            <div class="body-text">
+                <p>Sehubungan dengan hal tersebut , kami mengundang Bapak/Ibu untuk hadir pada:</p>
+            </div>
+            <table class="undangan-table">
                 <tr>
-                    <td>Hari/Tanggal</td>
+                    <td>Hari/ Tanggal</td>
                     <td>: ............................................................</td>
                 </tr>
                 <tr>
@@ -519,67 +331,47 @@
                 </tr>
                 <tr>
                     <td>Tempat</td>
-                    <td>: <strong>Klinik (Ruang BK) SMAN 1 Kopang</strong></td>
+                    <td>: Klinik (Ruang BK) SMAN 1 Kopang</td>
                 </tr>
                 <tr>
                     <td>Agenda</td>
-                    <td>: <strong>Konsultasi hasil rekam medis karakter</strong></td>
+                    <td>: Konsultasi hasil rekam medis karakter dan penyusunan langkah terapi pemulihan siswa .</td>
                 </tr>
             </table>
 
             {{-- ===== PENUTUP ===== --}}
             <div class="body-text">
                 <p>
-                    Kami sangat berharap kehadiran Bapak/Ibu untuk memberikan dukungan moral bagi putra/putri kita.
-                    Kami percaya bahwa dengan kasih sayang dan kerja sama yang baik, setiap <em>"penyakit"</em>
-                    karakter dapat disembuhkan melalui pemberian <strong>"Vitamin"</strong> kebaikan yang tepat
-                    sehingga siswa memiliki kesempatan kedua untuk memperbaiki citra dirinya.
+                    Kami sangat berharap kehadiran Bapak/Ibu untuk memberikan dukungan moral bagi putra / putri kita . Kami percaya bahwa dengan kasih sayang dan kerja sama yang baik , setiap " penyakit " karakter dapat disembuhkan melalui pemberian "Vitamin" kebaikan yang tepat sehingga siswa memiliki kesempatan kedua untuk memperbaiki citra dirinya .
                 </p>
                 <p>
-                    Demikian undangan ini kami sampaikan. Atas perhatian dan kerja sama Bapak/Ibu demi masa depan
-                    ananda, kami ucapkan terima kasih.
+                    Demikian undangan ini kami sampaikan . Atas perhatian dan kerja sama Bapak/Ibu demi masa depan ananda , kami ucapkan terima kasih.
                 </p>
             </div>
-            <div class="salam"><em>Wassalamu'alaikum Warahmatullahi Wabarakatuh</em></div>
+
+            <div style="text-align: right; margin-top: 20px; font-size: 12pt;">
+                Kopang , ........... 202 …
+            </div>
 
             {{-- ===== TTD ===== --}}
-
-            {{-- Baris tanggal: hanya di kanan --}}
-            <div style="display: flex; justify-content: flex-end; font-size: 11pt; margin-top: 14px; margin-bottom: 4px;">
-                <span>Kopang, .......... 202…</span>
-            </div>
-
-            {{-- Baris 1: Wakasek (kiri) + Koordinator BK (kanan) --}}
-            <div style="display: flex; justify-content: space-between; font-size: 11pt; margin-top: 4px;">
-                <div class="ttd-block" style="width: 40%; text-align: left;">
-                    <div class="ttd-title" style="text-align: left;">Wakasek Kesiswaan,</div>
-                    <div class="ttd-space"></div>
-                    <div class="ttd-line">
-                        <div class="ttd-name">(__________________________)</div>
-                        <div class="ttd-nip">NIP. ................................</div>
+            <div class="ttd-container">
+                <div class="ttd-row">
+                    <div class="ttd-block">
+                        <p>Wakasek Kesiswaan,</p>
+                        <div class="ttd-space"></div>
+                        <p class="ttd-name">(___________________________)</p>
+                    </div>
+                    <div class="ttd-block">
+                        <p>Koordinator BK,</p>
+                        <div class="ttd-space"></div>
+                        <p class="ttd-name">(___________________________)</p>
                     </div>
                 </div>
-                <div class="ttd-block" style="width: 40%; text-align: left;">
-                    <div class="ttd-title" style="text-align: left;">Koordinator BK,</div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p>Mengetahui ,</p>
+                    <p>Kepala SMAN 1 KOPANG,</p>
                     <div class="ttd-space"></div>
-                    <div class="ttd-line">
-                        <div class="ttd-name">(__________________________)</div>
-                        <div class="ttd-nip">NIP. ................................</div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Baris 2: Kepala Sekolah — di tengah --}}
-            <div style="display: flex; justify-content: center; font-size: 11pt; margin-top: 16px;">
-                <div class="ttd-block" style="width: 44%; text-align: center;">
-                    <div class="ttd-title" style="text-align: center; justify-content: center;">
-                        Mengetahui,<br>Kepala SMAN 1 KOPANG,
-                    </div>
-                    <div class="ttd-space"></div>
-                    <div class="ttd-line">
-                        <div class="ttd-name">(__________________________)</div>
-                        <div class="ttd-nip">NIP. ................................</div>
-                    </div>
+                    <p class="ttd-name">(___________________________)</p>
                 </div>
             </div>
 
@@ -590,17 +382,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('behaviorChart').getContext('2d');
-            
-            // Matikan animasi agar grafik langsung render (penting untuk print PDF)
             Chart.defaults.animation = false;
-
-            const gradientVitamin = ctx.createLinearGradient(0, 0, 0, 180);
-            gradientVitamin.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
-            gradientVitamin.addColorStop(1, 'rgba(16, 185, 129, 0)');
-
-            const gradientPenyakit = ctx.createLinearGradient(0, 0, 0, 180);
-            gradientPenyakit.addColorStop(0, 'rgba(239, 68, 68, 0.2)');
-            gradientPenyakit.addColorStop(1, 'rgba(239, 68, 68, 0)');
 
             const labels = {!! json_encode($chartLabels) !!};
             const vitaminData = {!! json_encode($chartVitaminData) !!};
@@ -614,44 +396,33 @@
                         label: 'Vitamin',
                         data: vitaminData,
                         borderColor: '#10b981',
-                        backgroundColor: gradientVitamin,
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         fill: true,
-                        tension: 0.45,
-                        borderWidth: 3,
-                        pointRadius: 0,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 2,
                     }, {
                         label: 'Penyakit',
                         data: penyakitData,
                         borderColor: '#ef4444',
-                        backgroundColor: gradientPenyakit,
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
                         fill: true,
-                        tension: 0.45,
-                        borderWidth: 3,
-                        pointRadius: 0,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 2,
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: { legend: { display: true, position: 'top' } },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            border: { display: false },
-                            grid: { color: '#f1f5f9', drawTicks: false },
-                            ticks: { color: '#94a3b8', font: { size: 10, weight: '700' }, padding: 8 }
-                        },
-                        x: {
-                            border: { display: false },
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8', font: { size: 10, weight: '700' }, padding: 8 }
-                        }
+                        y: { beginAtZero: true },
+                        x: { grid: { display: false } }
                     }
                 }
             });
 
-            // Auto-trigger print dialog jika URL mengandung ?print=1
-            // Diberi delay sedikit agar chart.js selesai dirender di DOM
             if (new URLSearchParams(window.location.search).get('print') === '1') {
                 setTimeout(() => window.print(), 800);
             }
