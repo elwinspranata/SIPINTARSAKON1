@@ -215,7 +215,7 @@
             </table>
         </div>
         @if($users->hasPages())
-        <div style="padding: 0.75rem; border-top: 1px solid var(--border);">{{ $users->links() }}</div>
+        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--border);">{{ $users->links('vendor.pagination.custom') }}</div>
         @endif
     </div>
 

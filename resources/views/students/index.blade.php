@@ -192,7 +192,7 @@
 
             @if($students->hasPages())
             <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--border-light); background: #fcfdfe;">
-                {{ $students->links() }}
+                {{ $students->links('vendor.pagination.custom') }}
             </div>
             @endif
         </div>
