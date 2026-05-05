@@ -16,12 +16,12 @@ class RecordController extends Controller
         $violation_records = BehaviorRecord::with(['student', 'user', 'violationType'])
             ->whereNotNull('violation_type_id')
             ->latest()
-            ->paginate(15, ['*'], 'violation_page');
+            ->paginate(10, ['*'], 'violation_page');
 
         $vitamin_records = BehaviorRecord::with(['student', 'user', 'vitaminType'])
             ->whereNotNull('vitamin_type_id')
             ->latest()
-            ->paginate(15, ['*'], 'vitamin_page');
+            ->paginate(10, ['*'], 'vitamin_page');
 
         return view('records.index', compact('violation_records', 'vitamin_records'));
     }
