@@ -10,9 +10,9 @@
     @section('header_subtitle', $isViolation ? 'Catat perilaku negatif siswa yang melanggar aturan sekolah.' : 'Berikan apresiasi atas prestasi dan kebaikan siswa.')
 
     @if($errors->any())
-    <div style="background: #fef2f2; color: #ef4444; padding: 1rem; border-radius: 14px; margin-bottom: 2rem; font-size: 0.8125rem; border: 1px solid rgba(239,68,68,0.1); animation: fadeInUp 0.4s ease-out;">
-        <ul style="padding-left: 1.5rem; font-weight: 700;">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
-    </div>
+        <div style="background: #fef2f2; color: #ef4444; padding: 1rem; border-radius: 14px; margin-bottom: 2rem; font-size: 0.8125rem; border: 1px solid rgba(239,68,68,0.1); animation: fadeInUp 0.4s ease-out;">
+            <ul style="padding-left: 1.5rem; font-weight: 700;">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+        </div>
     @endif
 
     <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; align-items: start;">
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('records.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('records.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="type" value="{{ $type }}">
 
@@ -76,16 +76,6 @@
                     <textarea name="notes" class="textarea" rows="3" placeholder="Jelaskan kronologi atau detail kejadian..." style="border-radius: 14px; padding: 1rem; border: 1px solid var(--border-light);">{{ old('notes') }}</textarea>
                 </div>
 
-                <div class="form-group">
-                    <label class="label" style="font-weight: 700; color: var(--primary-dark);">Bukti Dokumentasi (Opsional)</label>
-                    <div id="dropzone" style="border: 2px dashed #e2e8f0; border-radius: 16px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s; background: #f8fafc;" onclick="document.getElementById('evidenceInput').click()" onmouseover="this.style.borderColor='{{ $accentColor }}'; this.style.background='{{ $accentBg }}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'">
-                        <i data-lucide="camera" style="color: {{ $accentColor }}; width: 32px; height: 32px; margin-bottom: 0.75rem;"></i>
-                        <div style="font-size: 0.875rem; color: var(--primary-dark); font-weight: 800;">Upload atau Ambil Foto</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 600;">Format: JPG, PNG (Maks 2MB)</div>
-                        <input type="file" name="evidence" id="evidenceInput" style="display: none;" onchange="previewFile(this)">
-                    </div>
-                </div>
-
                 <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
                     <button type="submit" class="btn btn-primary" style="width: 100%; height: 52px; border-radius: 14px; font-weight: 800; background: {{ $accentColor }}; border: none; box-shadow: 0 10px 20px {{ $isViolation ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)' }};">
                         <i data-lucide="save" style="width: 20px; height: 20px;"></i>
@@ -130,15 +120,11 @@
                 <ul style="display: flex; flex-direction: column; gap: 0.875rem; padding: 0; list-style: none;">
                     <li style="display: flex; gap: 0.75rem;">
                         <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--success); flex-shrink: 0; margin-top: 2px;"></i>
-                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Poin bersifat akumulatif selama satu tahun ajaran berlangsung.</span>
+                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Poin bersifat akumulatif.</span>
                     </li>
                     <li style="display: flex; gap: 0.75rem;">
                         <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--success); flex-shrink: 0; margin-top: 2px;"></i>
                         <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Vitamin diberikan untuk prestasi akademik maupun perilaku positif.</span>
-                    </li>
-                    <li style="display: flex; gap: 0.75rem;">
-                        <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--success); flex-shrink: 0; margin-top: 2px;"></i>
-                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Wali kelas akan menerima notifikasi real-time saat data disimpan.</span>
                     </li>
                 </ul>
             </div>
@@ -146,7 +132,7 @@
             {{-- Score Indicator Card --}}
             <div class="card" style="padding: 1.5rem; background: linear-gradient(135deg, #334155, #0f172a); border: none; color: white;">
                 <h4 style="font-weight: 800; font-size: 0.875rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
-                    <i data-lucide="bar-chart-3" style="width: 18px; height: 18px; color: var(--secondary);"></i> 
+                    <i data-lucide="bar-chart-3" style="width: 18px; height: 18px; color: var(--secondary);"></i>
                     Indikator Kedisiplinan
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -300,18 +286,6 @@
                     statusEl.style.backgroundColor = c;
                     statusEl.style.color = 'white';
                 });
-        }
-
-        function previewFile(input) {
-            var zone = document.getElementById('dropzone');
-            if (input.files && input.files[0]) {
-                zone.style.borderColor = '{{ $accentColor }}';
-                zone.style.background = '{{ $accentBg }}';
-                zone.innerHTML = '<i data-lucide="check-circle" style="color: {{ $accentColor }}; width: 32px; height: 32px; margin-bottom: 0.75rem;"></i>' +
-                                 '<div style="font-size: 0.875rem; color: var(--primary-dark); font-weight: 800;">Foto Berhasil Dipilih</div>' +
-                                 '<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 600;">' + input.files[0].name + '</div>';
-                lucide.createIcons();
-            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
