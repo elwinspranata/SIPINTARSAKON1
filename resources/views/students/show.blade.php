@@ -74,37 +74,20 @@
                 <h4 style="font-size: 0.875rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
                     <i data-lucide="calculator" style="width: 18px; height: 18px; color: var(--primary);"></i> Ringkasan Poin
                 </h4>
-<<<<<<< Updated upstream
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 0.6rem;">
                             <span style="width: 10px; height: 10px; border-radius: 4px; background: #ef4444;"></span>
                             <span style="font-size: 0.8125rem; font-weight: 700; color: var(--text-secondary);">Total Penyakit</span>
                         </div>
-                        <span style="font-weight: 800; color: #ef4444;">+{{ $totalViolation }}</span>
+                        <span style="font-weight: 800; color: #ef4444;">-{{ $totalViolation }}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 0.6rem;">
                             <span style="width: 10px; height: 10px; border-radius: 4px; background: #10b981;"></span>
                             <span style="font-size: 0.8125rem; font-weight: 700; color: var(--text-secondary);">Total Vitamin</span>
                         </div>
-                        <span style="font-weight: 800; color: #10b981;">-{{ $totalVitamin }}</span>
-=======
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8125rem;">
-                        <span style="color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
-                            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--danger);"></span>
-                            Poin Penyakit
-                        </span>
-                        <span style="font-weight: 700; color: var(--danger);">-{{ $totalViolation }}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8125rem;">
-                        <span style="color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
-                            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></span>
-                            Poin Vitamin
-                        </span>
-                        <span style="font-weight: 700; color: var(--success);">+{{ $totalVitamin }}</span>
->>>>>>> Stashed changes
+                        <span style="font-weight: 800; color: #10b981;">+{{ $totalVitamin }}</span>
                     </div>
                     <div style="height: 1px; background: var(--border-light); margin: 0.25rem 0;"></div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -135,7 +118,7 @@
                     </h3>
                     <span style="background: #fee2e2; color: #ef4444; padding: 0.35rem 0.75rem; border-radius: 10px; font-size: 0.75rem; font-weight: 800;">{{ $violationRecords->count() }} Kejadian</span>
                 </div>
-                
+
                 <div style="display: flex; flex-direction: column;">
                     @forelse($violationRecords->sortByDesc('date') as $record)
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; transition: all 0.2s;" onmouseover="this.style.background='#fffafa'" onmouseout="this.style.background='transparent'">
@@ -151,20 +134,16 @@
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <div style="font-weight: 900; color: #ef4444; font-size: 1.125rem;">+{{ $record->violationType->points ?? 0 }}</div>
+                            <div style="font-weight: 900; color: #ef4444; font-size: 1.125rem;">-{{ $record->violationType->points ?? 0 }}</div>
                             <div style="font-size: 0.625rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Poin</div>
                         </div>
                     </div>
-<<<<<<< Updated upstream
                     @empty
                     <div style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
                         <i data-lucide="check-circle-2" style="width: 48px; height: 48px; opacity: 0.1; margin-bottom: 1rem;"></i>
                         <p style="font-weight: 700; font-size: 0.875rem;">Siswa berkelakuan sangat baik. Belum ada catatan penyakit.</p>
                     </div>
                     @endforelse
-=======
-                    <span style="font-weight: 700; color: var(--danger); font-size: 0.875rem; white-space: nowrap;">-{{ $record->violationType->points ?? 0 }}</span>
->>>>>>> Stashed changes
                 </div>
             </div>
 
@@ -177,7 +156,7 @@
                     </h3>
                     <span style="background: #d1fae5; color: #10b981; padding: 0.35rem 0.75rem; border-radius: 10px; font-size: 0.75rem; font-weight: 800;">{{ $vitaminRecords->count() }} Penghargaan</span>
                 </div>
-                
+
                 <div style="display: flex; flex-direction: column;">
                     @forelse($vitaminRecords->sortByDesc('date') as $record)
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">
@@ -193,20 +172,16 @@
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <div style="font-weight: 900; color: #10b981; font-size: 1.125rem;">-{{ $record->vitaminType->points ?? 0 }}</div>
+                            <div style="font-weight: 900; color: #10b981; font-size: 1.125rem;">+{{ $record->vitaminType->points ?? 0 }}</div>
                             <div style="font-size: 0.625rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Poin</div>
                         </div>
                     </div>
-<<<<<<< Updated upstream
                     @empty
                     <div style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
                         <i data-lucide="award" style="width: 48px; height: 48px; opacity: 0.1; margin-bottom: 1rem;"></i>
                         <p style="font-weight: 700; font-size: 0.875rem;">Belum ada catatan vitamin/prestasi untuk siswa ini.</p>
                     </div>
                     @endforelse
-=======
-                    <span style="font-weight: 700; color: var(--success); font-size: 0.875rem; white-space: nowrap;">+{{ $record->vitaminType->points ?? 0 }}</span>
->>>>>>> Stashed changes
                 </div>
             </div>
         </div>
@@ -224,4 +199,3 @@
     </style>
     @endpush
 </x-app-layout>
-
