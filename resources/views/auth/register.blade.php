@@ -51,7 +51,7 @@
             Daftar Sekarang
         </button>
 
-        <div style="margin-top: 2rem; text-align: center; font-size: 0.9375rem; color: #64748b;">
+        <div style="margin-top: 2rem; text-align: center; font-size: 0.9375rem; color: #7fa98a;">
             Sudah punya akun? 
             <a href="{{ route('login') }}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Masuk Sekarang</a>
         </div>

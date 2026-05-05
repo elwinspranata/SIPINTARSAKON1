@@ -35,13 +35,13 @@
 
         <!-- Remember Me & Forgot Password -->
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
-            <label for="remember_me" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #64748b; cursor: pointer; font-weight: 500;">
-                <input id="remember_me" type="checkbox" name="remember" style="width: 1.125rem; height: 1.125rem; border-radius: 6px; accent-color: #2B5EA7; cursor: pointer;">
+            <label for="remember_me" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #7fa98a; cursor: pointer; font-weight: 500;">
+                <input id="remember_me" type="checkbox" name="remember" style="width: 1.125rem; height: 1.125rem; border-radius: 6px; accent-color: #1B6B3A; cursor: pointer;">
                 <span>Ingat Saya</span>
             </label>
 
             @if (Route::has('password.request'))
-                <a style="font-size: 0.875rem; color: #2B5EA7; font-weight: 700; text-decoration: none;" href="{{ route('password.request') }}">
+                <a style="font-size: 0.875rem; color: #1B6B3A; font-weight: 700; text-decoration: none;" href="{{ route('password.request') }}">
                     Lupa Password?
                 </a>
             @endif
@@ -52,9 +52,9 @@
         </button>
 
         @if (Route::has('register'))
-        <div style="margin-top: 2rem; text-align: center; font-size: 0.9375rem; color: #64748b;">
+        <div style="margin-top: 2rem; text-align: center; font-size: 0.9375rem; color: #7fa98a;">
             Belum punya akun? 
-            <a href="{{ route('register') }}" style="color: #2B5EA7; font-weight: 700; text-decoration: none;">Daftar Sekarang</a>
+            <a href="{{ route('register') }}" style="color: #1B6B3A; font-weight: 700; text-decoration: none;">Daftar Sekarang</a>
         </div>
         @endif
     </form>

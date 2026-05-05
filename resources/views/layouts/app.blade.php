@@ -12,28 +12,8 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <style>
-        .logo-text-si { color: #22c55e; font-weight: 900; }
+    <style>        .logo-text-si { color: #22c55e; font-weight: 900; }
         .logo-text-pintar { color: #1B6B3A; font-weight: 900; }
-        
-        .notification-badge-pulse {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 8px;
-            height: 8px;
-            background: var(--danger);
-            border-radius: 50%;
-            border: 2px solid white;
-            animation: pulse-red 2s infinite;
-        }
-
-        @keyframes pulse-red {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 77, 77, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
-        }
-
         .motto-tag {
             background: var(--success-light);
             color: var(--success);
@@ -143,10 +123,7 @@
                 </div>
                 <div class="header-actions">
                     @yield('header_actions')
-                    <div class="notification-trigger" style="position: relative;">
-                        <i data-lucide="bell" size="18"></i>
-                        <span class="notification-badge-pulse"></span>
-                    </div>
+
                     @unless(request()->routeIs('classes.*'))
                     <a href="{{ route('records.create') }}" class="btn btn-primary" style="padding: 0.6rem 1.25rem;">
                         <i data-lucide="plus-circle" size="18"></i>
