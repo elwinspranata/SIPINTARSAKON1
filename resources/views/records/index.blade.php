@@ -71,7 +71,7 @@
         </div>
         @if($violation_records->hasPages())
         <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--border-light); background: #f8fafc;">
-            {{ $violation_records->links() }}
+            {{ $violation_records->links('vendor.pagination.custom') }}
         </div>
         @endif
     </div>
@@ -145,7 +145,7 @@
         </div>
         @if($vitamin_records->hasPages())
         <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--border-light); background: #f8fafc;">
-            {{ $vitamin_records->links() }}
+            {{ $vitamin_records->links('vendor.pagination.custom') }}
         </div>
         @endif
     </div>

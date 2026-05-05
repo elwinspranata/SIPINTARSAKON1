@@ -33,7 +33,7 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
-                <a href="{{ route('dashboard') }}" class="sidebar-logo">
+                <a href="{{ route('dashboard') }}" class="sidebar-logo" style="margin-bottom: 0;">
                     <div style="background: white; padding: 6px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-light);">
                         <img src="{{ asset('logo.png') }}" alt="Logo" style="height: 28px; width: 28px; object-fit: contain;">
                     </div>
@@ -41,8 +41,8 @@
                         <span class="logo-text-si">SI</span> <span class="logo-text-pintar">PINTAR</span>
                     </span>
                 </a>
-                <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" style="background: var(--primary-light); border: none;">
-                    <i data-lucide="x" size="20"></i>
+                <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" style="background: var(--primary-light); border: none; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary); flex-shrink: 0;">
+                    <i data-lucide="x" size="18"></i>
                 </button>
             </div>
 
