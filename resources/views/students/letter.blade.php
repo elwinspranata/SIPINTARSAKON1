@@ -482,6 +482,26 @@
                 </table>
             </div>
 
+
+            {{-- ===== GRAFIK TREN PERILAKU ===== --}}
+            <div style="margin-top: 24px; margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                    <div>
+                        <div style="font-size: 11pt; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                            <span>📈 Tren Perilaku Siswa</span>
+                        </div>
+                        <div style="font-size: 9pt; color: #64748b; margin-top: 2px;">Perbandingan vitamin vs penyakit (6 bulan terakhir)</div>
+                    </div>
+                    <div style="display: flex; gap: 12px; font-size: 9pt; font-weight: bold; background: #f8fafc; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0; align-items: center;">
+                        <span style="display: flex; align-items: center; gap: 6px; color: #334155;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Vitamin</span>
+                        <span style="display: flex; align-items: center; gap: 6px; color: #334155; margin-left: 8px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Penyakit</span>
+                    </div>
+                </div>
+                <div style="height: 180px; width: 100%; position: relative;">
+                    <canvas id="behaviorChart"></canvas>
+                </div>
+            </div>
+
             {{-- ===== UNDANGAN ===== --}}
             <div class="body-text" style="margin-top: 12px;">
                 <p>
@@ -523,34 +543,38 @@
             <div class="salam"><em>Wassalamu'alaikum Warahmatullahi Wabarakatuh</em></div>
 
             {{-- ===== TTD ===== --}}
-            <div style="margin-top: 14px; font-size: 11pt;">
-                Kopang, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+
+            {{-- Baris tanggal: hanya di kanan --}}
+            <div style="display: flex; justify-content: flex-end; font-size: 11pt; margin-top: 14px; margin-bottom: 4px;">
+                <span>Kopang, .......... 202…</span>
             </div>
 
-            <div class="ttd-section">
-                {{-- Wakasek --}}
-                <div class="ttd-block">
-                    <div class="ttd-title">Wakasek Kesiswaan,</div>
+            {{-- Baris 1: Wakasek (kiri) + Koordinator BK (kanan) --}}
+            <div style="display: flex; justify-content: space-between; font-size: 11pt; margin-top: 4px;">
+                <div class="ttd-block" style="width: 40%; text-align: left;">
+                    <div class="ttd-title" style="text-align: left;">Wakasek Kesiswaan,</div>
                     <div class="ttd-space"></div>
                     <div class="ttd-line">
                         <div class="ttd-name">(__________________________)</div>
                         <div class="ttd-nip">NIP. ................................</div>
                     </div>
                 </div>
-
-                {{-- Koordinator BK --}}
-                <div class="ttd-block">
-                    <div class="ttd-title">Koordinator BK,</div>
+                <div class="ttd-block" style="width: 40%; text-align: left;">
+                    <div class="ttd-title" style="text-align: left;">Koordinator BK,</div>
                     <div class="ttd-space"></div>
                     <div class="ttd-line">
                         <div class="ttd-name">(__________________________)</div>
                         <div class="ttd-nip">NIP. ................................</div>
                     </div>
                 </div>
+            </div>
 
-                {{-- Kepala Sekolah --}}
-                <div class="ttd-block">
-                    <div class="ttd-title">Mengetahui,<br>Kepala Sekolah,</div>
+            {{-- Baris 2: Kepala Sekolah — di tengah --}}
+            <div style="display: flex; justify-content: center; font-size: 11pt; margin-top: 16px;">
+                <div class="ttd-block" style="width: 44%; text-align: center;">
+                    <div class="ttd-title" style="text-align: center; justify-content: center;">
+                        Mengetahui,<br>Kepala SMAN 1 KOPANG,
+                    </div>
                     <div class="ttd-space"></div>
                     <div class="ttd-line">
                         <div class="ttd-name">(__________________________)</div>
@@ -562,11 +586,76 @@
         </div>{{-- .surat --}}
     </div>{{-- .page-wrapper --}}
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Auto-trigger print dialog jika URL mengandung ?print=1
-        if (new URLSearchParams(window.location.search).get('print') === '1') {
-            window.onload = () => setTimeout(() => window.print(), 500);
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('behaviorChart').getContext('2d');
+            
+            // Matikan animasi agar grafik langsung render (penting untuk print PDF)
+            Chart.defaults.animation = false;
+
+            const gradientVitamin = ctx.createLinearGradient(0, 0, 0, 180);
+            gradientVitamin.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+            gradientVitamin.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            const gradientPenyakit = ctx.createLinearGradient(0, 0, 0, 180);
+            gradientPenyakit.addColorStop(0, 'rgba(239, 68, 68, 0.2)');
+            gradientPenyakit.addColorStop(1, 'rgba(239, 68, 68, 0)');
+
+            const labels = {!! json_encode($chartLabels) !!};
+            const vitaminData = {!! json_encode($chartVitaminData) !!};
+            const penyakitData = {!! json_encode($chartViolationData) !!};
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Vitamin',
+                        data: vitaminData,
+                        borderColor: '#10b981',
+                        backgroundColor: gradientVitamin,
+                        fill: true,
+                        tension: 0.45,
+                        borderWidth: 3,
+                        pointRadius: 0,
+                    }, {
+                        label: 'Penyakit',
+                        data: penyakitData,
+                        borderColor: '#ef4444',
+                        backgroundColor: gradientPenyakit,
+                        fill: true,
+                        tension: 0.45,
+                        borderWidth: 3,
+                        pointRadius: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            border: { display: false },
+                            grid: { color: '#f1f5f9', drawTicks: false },
+                            ticks: { color: '#94a3b8', font: { size: 10, weight: '700' }, padding: 8 }
+                        },
+                        x: {
+                            border: { display: false },
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 10, weight: '700' }, padding: 8 }
+                        }
+                    }
+                }
+            });
+
+            // Auto-trigger print dialog jika URL mengandung ?print=1
+            // Diberi delay sedikit agar chart.js selesai dirender di DOM
+            if (new URLSearchParams(window.location.search).get('print') === '1') {
+                setTimeout(() => window.print(), 800);
+            }
+        });
     </script>
 </body>
 </html>

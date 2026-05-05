@@ -152,10 +152,28 @@ class StudentController extends Controller
             now()->year
         );
 
+        // Data Grafik: 6 Bulan Terakhir
+        $chartLabels = [];
+        $chartVitaminData = [];
+        $chartViolationData = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $chartLabels[] = $date->translatedFormat('M');
+            
+            $chartVitaminData[] = $vitaminRecords
+                ->filter(fn($r) => \Carbon\Carbon::parse($r->date)->format('Y-m') === $date->format('Y-m'))
+                ->sum(fn($r) => $r->vitaminType->points ?? 0);
+                
+            $chartViolationData[] = $violationRecords
+                ->filter(fn($r) => \Carbon\Carbon::parse($r->date)->format('Y-m') === $date->format('Y-m'))
+                ->sum(fn($r) => $r->violationType->points ?? 0);
+        }
+
         return view('students.letter', compact(
             'student', 'violationRecords', 'vitaminRecords',
             'totalViolation', 'totalVitamin', 'netPoints', 'netDisplay',
-            'statusText', 'statusSP', 'nomorSurat'
+            'statusText', 'statusSP', 'nomorSurat',
+            'chartLabels', 'chartVitaminData', 'chartViolationData'
         ));
     }
 }
