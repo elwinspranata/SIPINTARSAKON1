@@ -111,7 +111,7 @@
                 <div style="background: rgba(255,255,255,0.05); padding: 1.25rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 0.8125rem; font-weight: 700; color: rgba(255,255,255,0.8);">Akumulasi Poin</span>
-                        <div style="text-align: right;">
+                        <div style="display: flex; flex-direction: column; align-items: center;">
                             <div id="infoPoints" style="font-size: 1.75rem; font-weight: 900; line-height: 1;"></div>
                             <div id="infoStatus" style="font-size: 0.625rem; font-weight: 900; margin-top: 4px; padding: 0.2rem 0.6rem; border-radius: 6px; display: inline-block;"></div>
                         </div>

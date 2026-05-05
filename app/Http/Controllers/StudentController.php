@@ -114,6 +114,7 @@ class StudentController extends Controller
 
         return response()->json([
             'name' => $student->name,
+            'nisn' => $student->nisn,
             'points' => $points,
             'violation_points' => $vPoints,
             'vitamin_points' => $aPoints,
