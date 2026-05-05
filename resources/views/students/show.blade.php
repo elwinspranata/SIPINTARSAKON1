@@ -183,7 +183,7 @@
     </div>
 
     {{-- Re-use the Edit Student Modal Logic from index --}}
-    @include('students.modals.edit') {{-- I'll create this or just inline it --}}
+    @include('students.modals.edit')
 
     @push('scripts')
     <style>
