@@ -2,141 +2,172 @@
     @php
         $type = request('type', 'violation');
         $isViolation = $type == 'violation';
+        $accentColor = $isViolation ? '#ef4444' : '#10b981';
+        $accentBg = $isViolation ? '#fef2f2' : '#ecfdf5';
     @endphp
 
-    @section('header_title', $isViolation ? 'Input Pelanggaran (Penyakit)' : 'Input Prestasi (Vitamin)')
+    @section('header_title', $isViolation ? 'Input Penyakit' : 'Berikan Vitamin')
     @section('header_subtitle', $isViolation ? 'Catat perilaku negatif siswa yang melanggar aturan sekolah.' : 'Berikan apresiasi atas prestasi dan kebaikan siswa.')
 
     @if($errors->any())
-    <div style="background: var(--danger-light); color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; font-size: 0.8125rem; border: 1px solid rgba(239,68,68,0.1);">
-        <ul style="padding-left: 1rem;">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+    <div style="background: #fef2f2; color: #ef4444; padding: 1rem; border-radius: 14px; margin-bottom: 2rem; font-size: 0.8125rem; border: 1px solid rgba(239,68,68,0.1); animation: fadeInUp 0.4s ease-out;">
+        <ul style="padding-left: 1.5rem; font-weight: 700;">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
     </div>
     @endif
 
-    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem; align-items: start;">
-        <!-- Form -->
-        <div class="card">
+    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; align-items: start;">
+        <!-- Form Section -->
+        <div class="card" style="padding: 2.5rem; border: 1px solid var(--border-light); animation: fadeInUp 0.5s ease-out;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem;">
+                <div style="width: 54px; height: 54px; background: {{ $accentBg }}; color: {{ $accentColor }}; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px {{ $isViolation ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)' }};">
+                    <i data-lucide="{{ $isViolation ? 'alert-octagon' : 'sparkles' }}" style="width: 28px; height: 28px;"></i>
+                </div>
+                <div>
+                    <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--primary-dark);">{{ $isViolation ? 'Form Catatan Pelanggaran' : 'Form Pemberian Prestasi' }}</h2>
+                    <p style="font-size: 0.8125rem; color: var(--text-muted); font-weight: 500;">Silakan lengkapi detail informasi di bawah ini.</p>
+                </div>
+            </div>
+
             <form action="{{ route('records.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="type" value="{{ $type }}">
 
-                <div class="form-group">
-                    <label class="label">Pilih Kelas <span style="color: var(--danger);">*</span></label>
-                    <select id="classSelect" class="select" required onchange="loadClassStudents()">
-                        <option value="">-- Pilih Kelas --</option>
-                        @foreach($classes as $class)
-                            <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="label" style="font-weight: 700; color: var(--primary-dark);">Target Kelas</label>
+                        <select id="classSelect" class="select" required onchange="loadClassStudents()" style="height: 48px;">
+                            <option value="">-- Pilih Kelas --</option>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label class="label">Pilih Siswa <span style="color: var(--danger);">*</span></label>
-                    <select name="student_id" id="studentSelect" class="select" required disabled onchange="loadStudentPoints()">
-                        <option value="">-- Pilih kelas terlebih dahulu --</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="label">{{ $isViolation ? 'Jenis Pelanggaran' : 'Kategori Vitamin' }} <span style="color: var(--danger);">*</span></label>
-                    @if($isViolation)
-                    <select name="violation_type_id" class="select" required>
-                        <option value="">-- Pilih --</option>
-                        @foreach($violation_types as $category => $types)
-                            <optgroup label="{{ $category }}">
-                                @foreach($types as $vt)
-                                    <option value="{{ $vt->id }}" {{ old('violation_type_id') == $vt->id ? 'selected' : '' }}>{{ $vt->name }} ({{ $vt->points }} Poin)</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
-                    @else
-                    <select name="vitamin_type_id" class="select" required>
-                        <option value="">-- Pilih --</option>
-                        @foreach($vitamin_types as $category => $types)
-                            <optgroup label="{{ $category }}">
-                                @foreach($types as $vt)
-                                    <option value="{{ $vt->id }}" {{ old('vitamin_type_id') == $vt->id ? 'selected' : '' }}>{{ $vt->name }} (+{{ $vt->points }} Poin)</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
-                    @endif
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Keterangan</label>
-                    <textarea name="notes" class="textarea" rows="3" placeholder="Jelaskan detail kejadian...">{{ old('notes') }}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Bukti Foto (Opsional)</label>
-                    <div style="border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; cursor: pointer; transition: all 200ms;" onclick="this.querySelector('input').click()" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-                        <i data-lucide="camera" style="color: var(--text-muted); opacity: 0.4;" size="24"></i>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Klik untuk upload</div>
-                        <input type="file" name="evidence" style="display: none;">
+                    <div class="form-group">
+                        <label class="label" style="font-weight: 700; color: var(--primary-dark);">Nama Siswa</label>
+                        <select name="student_id" id="studentSelect" class="select" required disabled onchange="loadStudentPoints()" style="height: 48px;">
+                            <option value="">-- Pilih kelas dulu --</option>
+                        </select>
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
-                    <button type="submit" class="btn {{ $isViolation ? '' : '' }}" style="flex: 2; padding: 0.75rem; background: {{ $isViolation ? 'var(--danger)' : 'var(--success)' }}; color: white; font-size: 0.875rem; border-radius: var(--radius-md);">
-                        <i data-lucide="save" size="15"></i> {{ $isViolation ? 'Simpan Pelanggaran' : 'Simpan Prestasi' }}
+                <div class="form-group">
+                    <label class="label" style="font-weight: 700; color: var(--primary-dark);">{{ $isViolation ? 'Kategori Pelanggaran' : 'Kategori Vitamin' }}</label>
+                    <select name="{{ $isViolation ? 'violation_type_id' : 'vitamin_type_id' }}" class="select" required style="height: 48px;">
+                        <option value="">-- Pilih Jenis --</option>
+                        @if($isViolation)
+                            @foreach($violation_types as $category => $types)
+                                <optgroup label="{{ $category }}">
+                                    @foreach($types as $vt)
+                                        <option value="{{ $vt->id }}" {{ old('violation_type_id') == $vt->id ? 'selected' : '' }}>{{ $vt->name }} ({{ $vt->points }} Poin)</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        @else
+                            @foreach($vitamin_types as $category => $types)
+                                <optgroup label="{{ $category }}">
+                                    @foreach($types as $vt)
+                                        <option value="{{ $vt->id }}" {{ old('vitamin_type_id') == $vt->id ? 'selected' : '' }}>{{ $vt->name }} (+{{ $vt->points }} Poin)</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" style="font-weight: 700; color: var(--primary-dark);">Keterangan Tambahan</label>
+                    <textarea name="notes" class="textarea" rows="3" placeholder="Jelaskan kronologi atau detail kejadian..." style="border-radius: 14px; padding: 1rem; border: 1px solid var(--border-light);">{{ old('notes') }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" style="font-weight: 700; color: var(--primary-dark);">Bukti Dokumentasi (Opsional)</label>
+                    <div id="dropzone" style="border: 2px dashed #e2e8f0; border-radius: 16px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s; background: #f8fafc;" onclick="document.getElementById('evidenceInput').click()" onmouseover="this.style.borderColor='{{ $accentColor }}'; this.style.background='{{ $accentBg }}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'">
+                        <i data-lucide="camera" style="color: {{ $accentColor }}; width: 32px; height: 32px; margin-bottom: 0.75rem;"></i>
+                        <div style="font-size: 0.875rem; color: var(--primary-dark); font-weight: 800;">Upload atau Ambil Foto</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 600;">Format: JPG, PNG (Maks 2MB)</div>
+                        <input type="file" name="evidence" id="evidenceInput" style="display: none;" onchange="previewFile(this)">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 2; height: 52px; border-radius: 14px; font-weight: 800; background: {{ $accentColor }}; border: none; box-shadow: 0 10px 20px {{ $isViolation ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)' }};">
+                        <i data-lucide="save" style="width: 20px; height: 20px;"></i>
+                        {{ $isViolation ? 'Simpan Catatan' : 'Berikan Vitamin' }}
                     </button>
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline" style="flex: 1; padding: 0.75rem;">Batal</a>
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline" style="flex: 1; height: 52px; border-radius: 14px; font-weight: 800;">Batal</a>
                 </div>
             </form>
         </div>
 
-        <!-- Guide Panel -->
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-            {{-- Student Points Info Card (Sidebar) --}}
-            <div id="studentInfoCard" class="card" style="display: none; animation: fadeInUp 0.3s ease-out;">
-                <h3 style="font-size: 0.875rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted);">
-                    <i data-lucide="user-check" size="15"></i> Siswa Terpilih
-                </h3>
-                <div id="infoName" style="font-weight: 800; font-size: 1.125rem; color: var(--text); margin-bottom: 1rem; line-height: 1.2;"></div>
-                
-                <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-hover); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-                    <div style="font-size: 0.8125rem; color: var(--text-secondary); font-weight: 600;">Total Poin</div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span id="infoPoints" style="font-size: 1.25rem; font-weight: 900; line-height: 1;"></span>
-                        <span id="infoStatus" style="font-size: 0.625rem; font-weight: 800; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 99px;"></span>
+        <!-- Sidebar Info Section -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {{-- Student Quick View Card --}}
+            <div id="studentInfoCard" class="card" style="display: none; padding: 2rem; border: none; background: linear-gradient(135deg, var(--primary-dark), #1e293b); color: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); animation: fadeInUp 0.4s ease-out;">
+                <h3 style="font-size: 0.8125rem; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.25rem;">Profil Siswa</h3>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div id="infoAvatar" style="width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900;"></div>
+                    <div>
+                        <div id="infoName" style="font-weight: 900; font-size: 1.125rem; letter-spacing: -0.02em;"></div>
+                        <div id="infoNisn" style="font-size: 0.75rem; color: rgba(255,255,255,0.6); font-weight: 600;"></div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.25rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.8125rem; font-weight: 700; color: rgba(255,255,255,0.8);">Akumulasi Poin</span>
+                        <div style="text-align: right;">
+                            <div id="infoPoints" style="font-size: 1.75rem; font-weight: 900; line-height: 1;"></div>
+                            <div id="infoStatus" style="font-size: 0.625rem; font-weight: 900; margin-top: 4px; padding: 0.2rem 0.6rem; border-radius: 6px; display: inline-block;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            @if($isViolation)
-            <div class="card" style="border-left: 3px solid var(--danger);">
-                <h3 style="font-size: 0.875rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-lucide="info" size="15" style="color: var(--danger);"></i> Panduan
-                </h3>
-                <ul style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                    <li>Akumulasi poin berlaku selama 1 tahun ajaran</li>
-                    <li>Poin Penyakit dapat dikurangi dengan Poin Vitamin</li>
-                    <li>Notifikasi otomatis dikirim ke Wali Kelas & Orang Tua</li>
-                </ul>
-            </div>
-            @else
-            <div class="card" style="border-left: 3px solid var(--success);">
-                <h3 style="font-size: 0.875rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-lucide="sparkles" size="15" style="color: var(--success);"></i> Manfaat Vitamin
-                </h3>
-                <ul style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                    <li>Mengurangi akumulasi poin pelanggaran</li>
-                    <li>Sertifikat elektronik terbit otomatis</li>
-                    <li>Notifikasi apresiasi ke Orang Tua</li>
-                </ul>
-            </div>
-            @endif
 
-            <div class="card" style="background: var(--primary-dark); border: none; color: white;">
-                <h3 style="font-size: 0.875rem; font-weight: 700; color: white; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-lucide="book-open" size="15" style="color: var(--secondary);"></i> Pedoman Skor
-                </h3>
-                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.75rem; color: rgba(255,255,255,0.7);">
-                    <div style="display: flex; justify-content: space-between;"><span>0 - 20 poin</span><span style="color: #22c55e; font-weight: 600;">Aman ✓</span></div>
-                    <div style="display: flex; justify-content: space-between;"><span>21 - 50 poin</span><span style="color: #3b82f6; font-weight: 600;">Baik</span></div>
-                    <div style="display: flex; justify-content: space-between;"><span>51 - 100 poin</span><span style="color: #f59e0b; font-weight: 600;">Waspada (SP1)</span></div>
-                    <div style="display: flex; justify-content: space-between;"><span>> 100 poin</span><span style="color: #ef4444; font-weight: 600;">Kritis (SP3)</span></div>
+            {{-- Guide Card --}}
+            <div class="card" style="padding: 1.5rem; border: 1px solid var(--border-light);">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+                    <div style="width: 32px; height: 32px; background: var(--bg); color: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="help-circle" style="width: 18px; height: 18px;"></i>
+                    </div>
+                    <h4 style="font-weight: 800; color: var(--primary-dark); font-size: 0.9375rem;">Panduan Singkat</h4>
+                </div>
+                <ul style="display: flex; flex-direction: column; gap: 0.875rem; padding: 0; list-style: none;">
+                    <li style="display: flex; gap: 0.75rem;">
+                        <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--success); flex-shrink: 0; margin-top: 2px;"></i>
+                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Poin bersifat akumulatif selama satu tahun ajaran berlangsung.</span>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem;">
+                        <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--success); flex-shrink: 0; margin-top: 2px;"></i>
+                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Vitamin diberikan untuk prestasi akademik maupun perilaku positif.</span>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem;">
+                        <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--success); flex-shrink: 0; margin-top: 2px;"></i>
+                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Wali kelas akan menerima notifikasi real-time saat data disimpan.</span>
+                    </li>
+                </ul>
+            </div>
+
+            {{-- Score Indicator Card --}}
+            <div class="card" style="padding: 1.5rem; background: linear-gradient(135deg, #334155, #0f172a); border: none; color: white;">
+                <h4 style="font-weight: 800; font-size: 0.875rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
+                    <i data-lucide="bar-chart-3" style="width: 18px; height: 18px; color: var(--secondary);"></i> 
+                    Indikator Kedisiplinan
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    @php
+                        $levels = [
+                            ['range' => '0 - 20', 'label' => 'Aman', 'color' => '#10b981'],
+                            ['range' => '21 - 50', 'label' => 'Baik', 'color' => '#3b82f6'],
+                            ['range' => '51 - 100', 'label' => 'Waspada (SP1)', 'color' => '#f59e0b'],
+                            ['range' => '> 100', 'label' => 'Kritis (SP3)', 'color' => '#ef4444'],
+                        ];
+                    @endphp
+                    @foreach($levels as $lvl)
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 0.6rem 0.875rem; border-radius: 10px;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.7);">{{ $lvl['range'] }} Poin</span>
+                        <span style="font-size: 0.75rem; font-weight: 900; color: {{ $lvl['color'] }};">{{ $lvl['label'] }}</span>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -155,32 +186,29 @@
             document.getElementById('studentInfoCard').style.display = 'none';
 
             if (!classId) {
-                studentSelect.innerHTML = '<option value="">-- Pilih kelas terlebih dahulu --</option>';
+                studentSelect.innerHTML = '<option value="">-- Pilih kelas dulu --</option>';
                 return;
             }
 
             fetch('/classes/' + classId + '/students')
-                .then(function(res) { return res.json(); })
-                .then(function(students) {
+                .then(res => res.json())
+                .then(students => {
                     if (students.length === 0) {
                         studentSelect.innerHTML = '<option value="">-- Tidak ada siswa --</option>';
                         return;
                     }
 
                     var html = '<option value="">-- Pilih Siswa --</option>';
-                    students.forEach(function(s) {
+                    students.forEach(s => {
                         var selected = oldStudentId == s.id ? ' selected' : '';
-                        html += '<option value="' + s.id + '"' + selected + '>' + s.name + '</option>';
+                        html += `<option value="${s.id}"${selected}>${s.name}</option>`;
                     });
                     studentSelect.innerHTML = html;
                     studentSelect.disabled = false;
 
-                    // Auto-load points if old student was pre-selected
-                    if (studentSelect.value) {
-                        loadStudentPoints();
-                    }
+                    if (studentSelect.value) loadStudentPoints();
                 })
-                .catch(function() {
+                .catch(() => {
                     studentSelect.innerHTML = '<option value="">-- Gagal memuat --</option>';
                 });
         }
@@ -195,43 +223,49 @@
             }
 
             fetch('/students/' + studentId + '/points')
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
+                .then(res => res.json())
+                .then(data => {
                     var colorMap = {
-                        danger: { bg: 'var(--danger-light)', text: 'var(--danger)', border: 'rgba(239,68,68,0.15)' },
-                        warning: { bg: 'var(--warning-light)', text: 'var(--warning)', border: 'rgba(245,158,11,0.15)' },
-                        info: { bg: 'var(--info-light)', text: 'var(--info)', border: 'rgba(59,130,246,0.15)' },
-                        success: { bg: 'var(--success-light)', text: 'var(--success)', border: 'rgba(0,210,106,0.15)' }
+                        danger: '#ef4444',
+                        warning: '#f59e0b',
+                        info: '#3b82f6',
+                        success: '#10b981'
                     };
                     var c = colorMap[data.color] || colorMap.success;
 
-                    card.style.borderLeft = '3px solid ' + c.text;
                     card.style.display = 'block';
-
+                    document.getElementById('infoAvatar').textContent = data.name.charAt(0);
                     document.getElementById('infoName').textContent = data.name;
+                    document.getElementById('infoNisn').textContent = 'NISN: ' + (data.nisn || '-');
                     document.getElementById('infoPoints').textContent = data.points;
-                    document.getElementById('infoPoints').style.color = c.text;
+                    document.getElementById('infoPoints').style.color = c;
                     
                     var statusEl = document.getElementById('infoStatus');
                     statusEl.textContent = data.status;
-                    statusEl.style.backgroundColor = c.text;
+                    statusEl.style.backgroundColor = c;
                     statusEl.style.color = 'white';
-                })
-                .catch(function() {
-                    card.style.display = 'none';
                 });
         }
 
-        // Auto-load if old class_id exists (validation error redirect)
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('classSelect').value) {
-                loadClassStudents();
+        function previewFile(input) {
+            var zone = document.getElementById('dropzone');
+            if (input.files && input.files[0]) {
+                zone.style.borderColor = '{{ $accentColor }}';
+                zone.style.background = '{{ $accentBg }}';
+                zone.innerHTML = '<i data-lucide="check-circle" style="color: {{ $accentColor }}; width: 32px; height: 32px; margin-bottom: 0.75rem;"></i>' +
+                                 '<div style="font-size: 0.875rem; color: var(--primary-dark); font-weight: 800;">Foto Berhasil Dipilih</div>' +
+                                 '<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 600;">' + input.files[0].name + '</div>';
+                lucide.createIcons();
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('classSelect').value) loadClassStudents();
         });
     </script>
     <style>
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>

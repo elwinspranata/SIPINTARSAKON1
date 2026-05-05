@@ -45,12 +45,12 @@
 
         .login-card {
             width: 100%;
-            max-width: 440px;
+            max-width: 400px;
             background: #ffffff;
-            border-radius: 24px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(43, 94, 167, 0.15),
-                        0 0 0 1px rgba(0, 0, 0, 0.02);
+            border-radius: 20px;
+            padding: 2.25rem 2rem;
+            box-shadow: 0 20px 40px -12px rgba(43, 94, 167, 0.12),
+                        0 0 0 1px rgba(0, 0, 0, 0.01);
             position: relative;
             z-index: 10;
             border: 1px solid rgba(255, 255, 255, 0.8);
@@ -58,33 +58,28 @@
 
         .header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.75rem;
         }
 
         .banner-logo {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
-        .si-pintar-text {
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 1;
+        .logo-img {
+            height: 90px;
+            width: auto;
             margin-bottom: 0.25rem;
         }
 
-        .si-text { color: #00D26A; } 
-        .pintar-text { color: #2B5EA7; } 
-
         .motto-text {
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             font-weight: 700;
             color: #475569;
             font-style: italic;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .school-badge {
@@ -92,57 +87,57 @@
             align-items: center;
             gap: 0.5rem;
             background: #f1f5f9;
-            padding: 0.5rem 1rem;
+            padding: 0.375rem 0.875rem;
             border-radius: 99px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: #2B5EA7;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 2rem;
+            margin-bottom: 1.25rem;
             border: 1px solid #e2e8f0;
         }
 
         .school-badge img {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             object-fit: contain;
         }
 
         .copyright {
-            margin-top: 3rem;
+            margin-top: 2rem;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #94a3b8;
             font-weight: 700;
             letter-spacing: 0.025em;
         }
 
         /* Form elements reused from refined design */
-        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group { margin-bottom: 1.125rem; text-align: left; }
         .label {
-            font-size: 0.8125rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: #334155;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.375rem;
             display: block;
             padding-left: 0.25rem;
         }
         .input-wrapper { position: relative; }
         .input-icon {
             position: absolute;
-            left: 1.25rem;
+            left: 1.125rem;
             top: 50%;
             transform: translateY(-50%);
             color: #94a3b8;
         }
         .custom-input {
             width: 100%;
-            padding: 0.875rem 1rem 0.875rem 3.25rem;
-            border-radius: 16px;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border-radius: 12px;
             border: 2px solid #e2e8f0;
             background: #f8fafc;
-            font-size: 0.9375rem;
+            font-size: 0.875rem;
             font-family: inherit;
             transition: all 0.2s;
             color: #1e293b;
@@ -151,34 +146,35 @@
             outline: none;
             border-color: #2B5EA7;
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(43, 94, 167, 0.1);
+            box-shadow: 0 0 0 4px rgba(43, 94, 167, 0.08);
         }
         .submit-btn {
             width: 100%;
-            padding: 1rem;
-            border-radius: 16px;
+            padding: 0.875rem;
+            border-radius: 12px;
             background: #2B5EA7;
             color: white;
             border: none;
-            font-size: 1rem;
+            font-size: 0.9375rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 10px 20px -5px rgba(43, 94, 167, 0.3);
-            margin-top: 1rem;
+            box-shadow: 0 8px 16px -5px rgba(43, 94, 167, 0.25);
+            margin-top: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.025em;
         }
         .submit-btn:hover {
             background: #1e4a85;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px -5px rgba(43, 94, 167, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px -5px rgba(43, 94, 167, 0.35);
         }
 
         @media (max-width: 480px) {
             .login-card {
-                padding: 2.5rem 1.5rem;
-                border-radius: 20px;
+                padding: 2rem 1.25rem;
+                border-radius: 16px;
+                max-width: 100%;
             }
         }
     </style>
@@ -193,9 +189,7 @@
         <div class="login-card">
             <div class="header">
                 <div class="banner-logo">
-                    <div class="si-pintar-text">
-                        <span class="si-text">Si</span> <span class="pintar-text">Pintar</span>
-                    </div>
+                    <img src="{{ asset('logo_sipintar.png') }}" alt="Logo" class="logo-img">
                 </div>
                 <p class="motto-text">Sehat Karakternya, Pintar Orangnya</p>
                 

@@ -18,38 +18,30 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ViolationTypeSeeder::class,
             VitaminTypeSeeder::class,
+            StudentExcelSeeder::class,
+            TeacherSeeder::class,
         ]);
 
         // Admin User
-        User::factory()->create([
-            'name' => 'Administrator',
-            'email' => 'admin@sipintar.com',
-            'password' => bcrypt('password'),
-            'role' => 'admin',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@sipintar.com'],
+            [
+                'name' => 'Administrator',
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+                'is_approved' => true,
+            ]
+        );
 
         // Guru User
-        User::factory()->create([
-            'name' => 'Guru Pengajar',
-            'email' => 'guru@sipintar.com',
-            'password' => bcrypt('password'),
-            'role' => 'guru',
-        ]);
-
-        // Create some classes
-        $classes = ['X E.1', 'X E.2', 'XI F.1', 'XI F.2', 'XII IPA 1', 'XII IPS 1'];
-        foreach ($classes as $className) {
-            $class = \App\Models\SchoolClass::create(['name' => $className]);
-            
-            // Create 5 students per class
-            for ($i = 1; $i <= 5; $i++) {
-                \App\Models\Student::create([
-                    'name' => "Siswa {$i} {$className}",
-                    'nisn' => '12345' . $class->id . $i,
-                    'class_id' => $class->id,
-                    'gender' => $i % 2 == 0 ? 'P' : 'L',
-                ]);
-            }
-        }
+        User::firstOrCreate(
+            ['email' => 'guru@sipintar.com'],
+            [
+                'name' => 'Guru Pengajar',
+                'password' => bcrypt('password'),
+                'role' => 'guru',
+                'is_approved' => true,
+            ]
+        );
     }
 }
