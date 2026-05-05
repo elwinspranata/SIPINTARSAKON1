@@ -21,9 +21,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Carbon::setLocale('id');
+        \Carbon\Carbon::setLocale('id');
 
-        Gate::define('admin', function ($user) {
+        // Force HTTPS and Root URL if we are on ngrok
+        if (str_contains(request()->url(), 'ngrok-free.dev')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+            \Illuminate\Support\Facades\URL::forceRootUrl(config('app.url'));
+        }
+
+        \Illuminate\Support\Facades\Gate::define('admin', function ($user) {
             return $user->role === 'admin';
         });
     }

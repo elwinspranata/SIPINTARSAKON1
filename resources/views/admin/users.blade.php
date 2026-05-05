@@ -18,7 +18,7 @@
     @endif
 
     {{-- Stats --}}
-    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2.5rem; gap: 1.5rem;">
+    <div class="stats-grid" style="margin-bottom: 2.5rem; gap: 1.5rem;">
         @php
             $totalGuru = App\Models\User::where('role', 'guru')->count();
             $approvedGuru = App\Models\User::where('role', 'guru')->where('is_approved', true)->count();
@@ -57,12 +57,11 @@
 
     {{-- Filter --}}
     <form method="GET" action="{{ route('admin.users.index') }}">
-        <div class="filter-bar" style="background: var(--glass-bg); backdrop-filter: blur(8px); border: 1px solid var(--glass-border); padding: 0.5rem 0.5rem 0.5rem 1rem;">
+        <div class="filter-bar">
             <div class="filter-search">
                 <i data-lucide="search" class="filter-search-icon" style="width: 16px; height: 16px;"></i>
                 <input type="text" name="search" class="filter-input" style="border: none; background: transparent;" placeholder="Cari nama atau email guru..." value="{{ request('search') }}">
             </div>
-            <div style="height: 24px; width: 1px; background: var(--border); margin: 0 0.5rem;"></div>
             <select name="status" class="filter-select" style="border: none; background-color: transparent;" onchange="this.form.submit()">
                 <option value="">Semua Status</option>
                 <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Aktif</option>
@@ -78,14 +77,14 @@
     @php $pendingUsers = $users->filter(fn($u) => !$u->is_approved); @endphp
     @if($pendingUsers->count() > 0)
     <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2rem; border: none; border-radius: var(--radius-lg); box-shadow: 0 10px 30px rgba(234, 88, 12, 0.15);">
-        <div style="padding: 1.25rem 1.5rem; background: linear-gradient(135deg, #fff7ed, #ffedd5); border-bottom: 1px solid rgba(234, 88, 12, 0.1); display: flex; justify-content: space-between; align-items: center;">
+        <div style="padding: 1.25rem 1.5rem; background: linear-gradient(135deg, #fff7ed, #ffedd5); border-bottom: 1px solid rgba(234, 88, 12, 0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <h3 style="font-size: 0.9375rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; color: #ea580c;">
                 <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i> Butuh Persetujuan
             </h3>
             <span style="background: #ea580c; color: white; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.7rem; font-weight: 800;">{{ $pendingUsers->count() }} Guru Baru</span>
         </div>
         @foreach($pendingUsers as $user)
-        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(234, 88, 12, 0.05); display: flex; justify-content: space-between; align-items: center; background: white;">
+        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(234, 88, 12, 0.05); display: flex; justify-content: space-between; align-items: center; background: white; flex-wrap: wrap; gap: 1rem;">
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <div style="width: 44px; height: 44px; border-radius: 14px; background-image: url('https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=ea580c&color=fff&bold=true&size=88'); background-size: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.1);"></div>
                 <div>
@@ -114,7 +113,7 @@
 
     {{-- Active Users Table --}}
     <div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-light); background: white;">
-        <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #f8fafc, #ffffff);">
+        <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #f8fafc, #ffffff); flex-wrap: wrap; gap: 1rem;">
             <div>
                 <h3 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; color: var(--primary-dark);">
                     <i data-lucide="users" style="width: 20px; height: 20px; color: var(--primary);"></i> Daftar Guru & Staff
@@ -220,8 +219,8 @@
     </div>
 
     {{-- Add Modal --}}
-    <div id="addModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out;" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 480px; max-width: 95vw; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div id="addModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out; padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 480px; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="padding: 1.5rem 2rem; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h3 style="font-size: 1.125rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem;">
@@ -267,8 +266,8 @@
     </div>
 
     {{-- Edit Modal --}}
-    <div id="editModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out;" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 480px; max-width: 95vw; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div id="editModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out; padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 480px; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="padding: 1.5rem 2rem; background: linear-gradient(135deg, var(--secondary), #d97706); color: white; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h3 style="font-size: 1.125rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem;">

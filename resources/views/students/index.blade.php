@@ -9,7 +9,7 @@
     @endsection
 
     {{-- Stats Cards --}}
-    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2.5rem; gap: 1.5rem;">
+    <div class="stats-grid" style="margin-bottom: 2.5rem; gap: 1.5rem;">
         @php
             $totalStudents = App\Models\Student::count();
             $maleStudents = App\Models\Student::where('gender', 'L')->count();
@@ -49,12 +49,11 @@
 
     {{-- Filters --}}
     <form method="GET" action="{{ route('students.index') }}">
-        <div class="filter-bar" style="background: var(--glass-bg); backdrop-filter: blur(8px); border: 1px solid var(--glass-border); padding: 0.5rem 0.5rem 0.5rem 1rem;">
+        <div class="filter-bar">
             <div class="filter-search">
                 <i data-lucide="search" class="filter-search-icon" style="width: 16px; height: 16px;"></i>
                 <input type="text" name="search" class="filter-input" style="border: none; background: transparent;" placeholder="Cari nama atau NISN..." value="{{ request('search') }}">
             </div>
-            <div style="height: 24px; width: 1px; background: var(--border); margin: 0 0.5rem;"></div>
             <select name="class_id" class="filter-select" style="border: none; background-color: transparent;" onchange="this.form.submit()">
                 <option value="">Semua Kelas</option>
                 @foreach($classes as $class)
@@ -82,7 +81,7 @@
         </div>
 
         <div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-light); background: white;">
-            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #f8fafc, #ffffff);">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #f8fafc, #ffffff); flex-wrap: wrap; gap: 1rem;">
                 <div>
                     <h3 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; color: var(--primary-dark);">
                         <i data-lucide="user-square" style="width: 20px; height: 20px; color: var(--primary);"></i> Daftar Siswa
@@ -199,8 +198,8 @@
     </form>
 
     {{-- Add Student Modal --}}
-    <div id="addStudentModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out;" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 520px; max-width: 95vw; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div id="addStudentModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out; padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 520px; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="padding: 1.5rem 2rem; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h3 style="font-size: 1.125rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem;">
@@ -223,7 +222,7 @@
                     <label class="label" style="font-weight: 700; color: var(--primary-dark);">NISN</label>
                     <input type="text" name="nisn" class="input" placeholder="Nomor Induk Siswa Nasional">
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                     <div class="form-group">
                         <label class="label" style="font-weight: 700; color: var(--primary-dark);">Kelas</label>
                         <select name="class_id" class="select" required>

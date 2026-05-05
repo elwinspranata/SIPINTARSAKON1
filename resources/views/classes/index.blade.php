@@ -22,7 +22,7 @@
     @endif
 
     {{-- Stats --}}
-    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2.5rem; gap: 1.5rem;">
+    <div class="stats-grid" style="margin-bottom: 2.5rem; gap: 1.5rem;">
         @php
             $tingkatList = ['X', 'XI', 'XII'];
             $tingkatColors = ['X' => ['#2563eb', '#1d4ed8'], 'XI' => ['#d97706', '#b45309'], 'XII' => ['#059669', '#047857']];
@@ -43,7 +43,7 @@
     </div>
 
     {{-- Main Content: Cards per Tingkat --}}
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
+    <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
         @foreach($tingkatList as $tingkat)
         @php
             $color = $tingkatColors[$tingkat][0];
@@ -104,8 +104,8 @@
     </div>
 
     {{-- Add Modal --}}
-    <div id="addModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out;" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 480px; max-width: 90vw; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div id="addModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out; padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 480px; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="padding: 1.5rem 2rem; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1.125rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem;">
                     <i data-lucide="plus-circle" style="width: 20px; height: 20px;"></i>
@@ -140,8 +140,8 @@
     </div>
 
     {{-- Edit Modal --}}
-    <div id="editModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out;" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 480px; max-width: 90vw; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div id="editModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out; padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 480px; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="padding: 1.5rem 2rem; background: linear-gradient(135deg, #d97706, #92400e); color: white; display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1.125rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem;">
                     <i data-lucide="pencil" style="width: 20px; height: 20px;"></i>
@@ -175,8 +175,8 @@
     </div>
 
     {{-- Bulk Transfer Modal --}}
-    <div id="transferModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out;" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 560px; max-width: 90vw; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div id="transferModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease-out; padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 560px; padding: 0; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="padding: 1.5rem 2rem; background: linear-gradient(135deg, var(--secondary), #1d4ed8); color: white; display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1.125rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem;">
                     <i data-lucide="arrow-right-left" style="width: 20px; height: 20px;"></i>
@@ -188,7 +188,7 @@
             </div>
             <form action="{{ route('classes.bulkTransfer') }}" method="POST" id="transferForm" style="padding: 2rem;">
                 @csrf
-                <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: end; margin-bottom: 1.5rem;">
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: end; margin-bottom: 1.5rem;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label class="label" style="font-weight: 700; color: var(--primary-dark);">Kelas Asal</label>
                         <select name="source_class_id" id="sourceClass" class="select" required onchange="loadStudents()">

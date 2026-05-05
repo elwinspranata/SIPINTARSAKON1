@@ -28,9 +28,10 @@
 </head>
 <body>
     <div class="dashboard-container">
+
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div style="padding: 0.5rem;">
+        <aside class="sidebar" id="sidebar">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
                 <a href="{{ route('dashboard') }}" class="sidebar-logo">
                     <div style="background: white; padding: 6px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-light);">
                         <img src="{{ asset('logo.png') }}" alt="Logo" style="height: 28px; width: 28px; object-fit: contain;">
@@ -39,6 +40,9 @@
                         <span class="logo-text-si">SI</span> <span class="logo-text-pintar">PINTAR</span>
                     </span>
                 </a>
+                <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" style="background: var(--primary-light); border: none;">
+                    <i data-lucide="x" size="20"></i>
+                </button>
             </div>
 
             <nav class="sidebar-nav">
@@ -110,14 +114,21 @@
             </div>
         </aside>
 
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
         <!-- Main Content Area -->
         <main class="main-content">
             <header class="main-header">
-                <div>
-                    <h1 class="page-title">@yield('header_title', 'Dashboard')</h1>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 4px;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button type="button" class="mobile-menu-toggle btn btn-outline" onclick="toggleSidebar()">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div>
+                        <h1 class="page-title">@yield('header_title', 'Dashboard')</h1>
+                    <div class="header-meta" style="display: flex; align-items: center; gap: 0.75rem; margin-top: 4px;">
                         <span class="motto-tag">Sehat Karakternya, Pintar Orangnya</span>
-                        <span style="color: var(--text-muted); opacity: 0.3;">|</span>
+                        <span class="header-separator" style="color: var(--text-muted); opacity: 0.3;">|</span>
                         <span class="header-subtitle">@yield('header_subtitle', 'Sistem Pembinaan Integritas Terpadu')</span>
                     </div>
                 </div>
@@ -171,7 +182,25 @@
         </a>
     </nav>
 
-    <script>lucide.createIcons();</script>
+    <script>
+        lucide.createIcons();
+        
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            
+            // Toggle icon
+            const menuBtn = document.querySelector('.mobile-menu-toggle i');
+            if (sidebar.classList.contains('open')) {
+                menuBtn.setAttribute('data-lucide', 'x');
+            } else {
+                menuBtn.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

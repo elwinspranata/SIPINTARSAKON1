@@ -11,12 +11,18 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
             background-color: #f0faf3;
             color: #1a2e1f;
             -webkit-font-smoothing: antialiased;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         .login-wrapper {
@@ -185,10 +191,27 @@
         .footer-link a:hover { color: #155730; transform: translateX(-3px); }
 
         @media (max-width: 480px) {
+            .login-wrapper {
+                padding: 1rem;
+            }
             .login-card {
                 padding: 2rem 1.25rem;
                 border-radius: 16px;
-                max-width: 100%;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .logo-img {
+                height: 70px;
+            }
+
+            .motto-text {
+                font-size: 0.75rem;
+            }
+
+            .school-badge {
+                font-size: 0.65rem;
+                padding: 0.25rem 0.6rem;
             }
         }
     </style>

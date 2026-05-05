@@ -38,7 +38,7 @@
         ];
     @endphp
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
+    <div class="stats-grid" style="margin-bottom: 2rem;">
         @foreach($categories as $cat)
         <div class="card stats-card" style="border-top: 3px solid {{ $catColors[$cat] }};">
             <div class="stats-icon-wrapper" style="background: {{ $catBg[$cat] }}; color: {{ $catColors[$cat] }};">
@@ -51,7 +51,7 @@
     </div>
 
     {{-- Main Content --}}
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.25rem;">
+    <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
         @foreach($vitamins as $category => $types)
         @php
             $color = $catColors[$category] ?? 'var(--success)';
@@ -96,8 +96,8 @@
     </div>
 
     {{-- Add Modal --}}
-    <div id="addModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 480px; max-width: 90vw; padding: 0; overflow: hidden; animation: modalIn 0.3s ease-out;">
+    <div id="addModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 480px; padding: 0; overflow: hidden; animation: modalIn 0.3s ease-out;">
             <div style="padding: 1.5rem; background: var(--bg-hover); border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
                     <i data-lucide="plus-circle" size="18" style="color: var(--success);"></i>
@@ -113,7 +113,7 @@
                     <label class="label">Nama Vitamin <span style="color: var(--danger);">*</span></label>
                     <input type="text" name="name" class="input" placeholder="Contoh: Juara lomba olahraga" required>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
                     <div class="form-group">
                         <label class="label">Kategori <span style="color: var(--danger);">*</span></label>
                         <select name="category" class="select" required>
@@ -139,8 +139,8 @@
     </div>
 
     {{-- Edit Modal --}}
-    <div id="editModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);" onclick="if(event.target===this)this.style.display='none'">
-        <div class="card" style="width: 480px; max-width: 90vw; padding: 0; overflow: hidden; animation: modalIn 0.3s ease-out;">
+    <div id="editModal" style="display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 1rem;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="card" style="width: 100%; max-width: 480px; padding: 0; overflow: hidden; animation: modalIn 0.3s ease-out;">
             <div style="padding: 1.5rem; background: var(--bg-hover); border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
                     <i data-lucide="pencil" size="18" style="color: var(--secondary);"></i>
@@ -156,7 +156,7 @@
                     <label class="label">Nama Vitamin <span style="color: var(--danger);">*</span></label>
                     <input type="text" name="name" id="editName" class="input" required>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
                     <div class="form-group">
                         <label class="label">Kategori <span style="color: var(--danger);">*</span></label>
                         <select name="category" id="editCategory" class="select" required>

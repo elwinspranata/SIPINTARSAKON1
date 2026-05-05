@@ -3,7 +3,7 @@
     @section('header_subtitle', 'Selamat datang di Sistem Pembinaan Integritas Terpadu (SI PINTAR)')
 
     <!-- Stats Section -->
-    <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 2.5rem; gap: 1.5rem;">
+    <div class="stats-grid">
         <div class="card stats-card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none;">
             <div style="position: absolute; top: -10px; right: -10px; opacity: 0.1;">
                 <i data-lucide="users" style="width: 100px; height: 100px;"></i>
@@ -50,7 +50,7 @@
     </div>
 
     <!-- Main Content Grid -->
-    <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; align-items: start;">
+    <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; align-items: start;">
         <!-- Chart Card -->
         <div class="card" style="min-height: 420px; display: flex; flex-direction: column; border: 1px solid var(--border-light); animation: fadeInUp 0.5s ease-out;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">

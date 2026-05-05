@@ -15,9 +15,9 @@
     </div>
     @endif
 
-    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; align-items: start;">
+    <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; align-items: start;">
         <!-- Form Section -->
-        <div class="card" style="padding: 2.5rem; border: 1px solid var(--border-light); animation: fadeInUp 0.5s ease-out;">
+        <div class="card" style="padding: 1.5rem; border: 1px solid var(--border-light); animation: fadeInUp 0.5s ease-out;">
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem;">
                 <div style="width: 54px; height: 54px; background: {{ $accentBg }}; color: {{ $accentColor }}; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px {{ $isViolation ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)' }};">
                     <i data-lucide="{{ $isViolation ? 'alert-octagon' : 'sparkles' }}" style="width: 28px; height: 28px;"></i>
@@ -32,7 +32,7 @@
                 @csrf
                 <input type="hidden" name="type" value="{{ $type }}">
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
                     <div class="form-group">
                         <label class="label" style="font-weight: 700; color: var(--primary-dark);">Target Kelas</label>
                         <select id="classSelect" class="select" required onchange="loadClassStudents()" style="height: 48px;">
@@ -90,12 +90,12 @@
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 2; height: 52px; border-radius: 14px; font-weight: 800; background: {{ $accentColor }}; border: none; box-shadow: 0 10px 20px {{ $isViolation ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)' }};">
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; height: 52px; border-radius: 14px; font-weight: 800; background: {{ $accentColor }}; border: none; box-shadow: 0 10px 20px {{ $isViolation ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)' }};">
                         <i data-lucide="save" style="width: 20px; height: 20px;"></i>
                         {{ $isViolation ? 'Simpan Catatan' : 'Berikan Vitamin' }}
                     </button>
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline" style="flex: 1; height: 52px; border-radius: 14px; font-weight: 800;">Batal</a>
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline" style="width: 100%; height: 52px; border-radius: 14px; font-weight: 800;">Batal</a>
                 </div>
             </form>
         </div>
