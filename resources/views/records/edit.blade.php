@@ -76,30 +76,56 @@
         var isVitamin = {{ $isVitamin ? 'true' : 'false' }};
         var oldTypeId = '{{ $record->vitamin_type_id ?? $record->violation_type_id }}';
 
+        var categorySelectTs, typeSelectTs;
+
+        function initTomSelects() {
+            categorySelectTs = new TomSelect('#categorySelect', {
+                create: false,
+                plugins: ['dropdown_input'],
+                placeholder: "-- Pilih Kategori --"
+            });
+
+            typeSelectTs = new TomSelect('#typeSelect', {
+                create: false,
+                plugins: ['dropdown_input'],
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                placeholder: "-- Pilih kategori dulu --"
+            });
+
+            categorySelectTs.on('change', loadTypes);
+        }
+
         function loadTypes() {
-            var category = document.getElementById('categorySelect').value;
-            var typeSelect = document.getElementById('typeSelect');
+            var category = categorySelectTs.getValue();
             
+            typeSelectTs.clearOptions();
+            typeSelectTs.clear();
+
             if (!category || !typesData[category]) {
-                typeSelect.disabled = true;
-                typeSelect.innerHTML = '<option value="">-- Pilih kategori dulu --</option>';
+                typeSelectTs.disable();
                 return;
             }
             
             var types = typesData[category];
-            var html = '<option value="">-- Pilih Jenis --</option>';
-            types.forEach(t => {
-                var selected = oldTypeId == t.id ? ' selected' : '';
+            var options = types.map(t => {
                 var pointsText = isVitamin ? `(+${t.points} Poin)` : `(${t.points} Poin)`;
-                html += `<option value="${t.id}"${selected}>${t.name} ${pointsText}</option>`;
+                return { id: t.id, name: `${t.name} ${pointsText}` };
             });
             
-            typeSelect.innerHTML = html;
-            typeSelect.disabled = false;
+            typeSelectTs.addOptions(options);
+            typeSelectTs.enable();
+
+            if (oldTypeId) {
+                typeSelectTs.setValue(oldTypeId);
+                oldTypeId = null;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('categorySelect').value) loadTypes();
+            initTomSelects();
+            if (categorySelectTs.getValue()) loadTypes();
         });
     </script>
     @endpush

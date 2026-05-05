@@ -176,66 +176,100 @@
         var isViolation = {{ $isViolation ? 'true' : 'false' }};
         var oldTypeId = '{{ old($isViolation ? 'violation_type_id' : 'vitamin_type_id') }}';
 
-        function loadTypes() {
-            var category = document.getElementById('categorySelect').value;
-            var typeSelect = document.getElementById('typeSelect');
+        var classSelectTs, studentSelectTs, categorySelectTs, typeSelectTs;
+
+        function initTomSelects() {
+            classSelectTs = new TomSelect('#classSelect', {
+                create: false,
+                plugins: ['dropdown_input'],
+                placeholder: "-- Pilih Kelas --"
+            });
             
+            studentSelectTs = new TomSelect('#studentSelect', {
+                create: false,
+                plugins: ['dropdown_input'],
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                placeholder: "-- Pilih kelas dulu --"
+            });
+
+            categorySelectTs = new TomSelect('#categorySelect', {
+                create: false,
+                plugins: ['dropdown_input'],
+                placeholder: "-- Pilih Kategori --"
+            });
+
+            typeSelectTs = new TomSelect('#typeSelect', {
+                create: false,
+                plugins: ['dropdown_input'],
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                placeholder: "-- Pilih kategori dulu --"
+            });
+
+            classSelectTs.on('change', loadClassStudents);
+            studentSelectTs.on('change', loadStudentPoints);
+            categorySelectTs.on('change', loadTypes);
+        }
+
+        function loadTypes() {
+            var category = categorySelectTs.getValue();
+            
+            typeSelectTs.clearOptions();
+            typeSelectTs.clear();
+
             if (!category || !typesData[category]) {
-                typeSelect.disabled = true;
-                typeSelect.innerHTML = '<option value="">-- Pilih kategori dulu --</option>';
+                typeSelectTs.disable();
                 return;
             }
             
             var types = typesData[category];
-            var html = '<option value="">-- Pilih Jenis --</option>';
-            types.forEach(t => {
-                var selected = oldTypeId == t.id ? ' selected' : '';
+            var options = types.map(t => {
                 var pointsText = isViolation ? `(${t.points} Poin)` : `(+${t.points} Poin)`;
-                html += `<option value="${t.id}"${selected}>${t.name} ${pointsText}</option>`;
+                return { id: t.id, name: `${t.name} ${pointsText}` };
             });
             
-            typeSelect.innerHTML = html;
-            typeSelect.disabled = false;
+            typeSelectTs.addOptions(options);
+            typeSelectTs.enable();
+
+            if (oldTypeId) {
+                typeSelectTs.setValue(oldTypeId);
+                oldTypeId = null;
+            }
         }
 
         function loadClassStudents() {
-            var classId = document.getElementById('classSelect').value;
-            var studentSelect = document.getElementById('studentSelect');
-
-            studentSelect.innerHTML = '<option value="">-- Memuat siswa... --</option>';
-            studentSelect.disabled = true;
+            var classId = classSelectTs.getValue();
+            
+            studentSelectTs.clearOptions();
+            studentSelectTs.clear();
+            studentSelectTs.disable();
             document.getElementById('studentInfoCard').style.display = 'none';
 
-            if (!classId) {
-                studentSelect.innerHTML = '<option value="">-- Pilih kelas dulu --</option>';
-                return;
-            }
+            if (!classId) return;
 
             fetch('/classes/' + classId + '/students')
                 .then(res => res.json())
                 .then(students => {
                     if (students.length === 0) {
-                        studentSelect.innerHTML = '<option value="">-- Tidak ada siswa --</option>';
                         return;
                     }
+                    
+                    studentSelectTs.addOptions(students);
+                    studentSelectTs.enable();
 
-                    var html = '<option value="">-- Pilih Siswa --</option>';
-                    students.forEach(s => {
-                        var selected = oldStudentId == s.id ? ' selected' : '';
-                        html += `<option value="${s.id}"${selected}>${s.name}</option>`;
-                    });
-                    studentSelect.innerHTML = html;
-                    studentSelect.disabled = false;
-
-                    if (studentSelect.value) loadStudentPoints();
+                    if (oldStudentId) {
+                        studentSelectTs.setValue(oldStudentId);
+                        oldStudentId = null;
+                    }
                 })
-                .catch(() => {
-                    studentSelect.innerHTML = '<option value="">-- Gagal memuat --</option>';
-                });
+                .catch(err => console.error("Error loading students:", err));
         }
 
         function loadStudentPoints() {
-            var studentId = document.getElementById('studentSelect').value;
+            var studentId = studentSelectTs.getValue();
             var card = document.getElementById('studentInfoCard');
 
             if (!studentId) {
@@ -281,8 +315,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('classSelect').value) loadClassStudents();
-            if (document.getElementById('categorySelect').value) loadTypes();
+            initTomSelects();
+            if (classSelectTs.getValue()) loadClassStudents();
+            if (categorySelectTs.getValue()) loadTypes();
         });
     </script>
     <style>
