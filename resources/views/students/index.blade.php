@@ -113,13 +113,12 @@
                     <tbody>
                         @forelse($students as $student)
                         @php
-                            $vPoints = $student->behaviorRecords->whereNotNull('violation_type_id')->sum(fn($r) => $r->violationType->points ?? 0);
-                            $aPoints = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sum(fn($r) => $r->vitaminType->points ?? 0);
-                            $points = max(0, $vPoints - $aPoints);
-                            if($points > 100) { $sc = 'danger'; $st = 'KRITIS'; $pc = '#ef4444'; $bgc = '#fef2f2'; }
-                            elseif($points > 50) { $sc = 'warning'; $st = 'WASPADA'; $pc = '#f59e0b'; $bgc = '#fffbeb'; }
-                            elseif($points > 20) { $sc = 'info'; $st = 'BAIK'; $pc = '#3b82f6'; $bgc = '#eff6ff'; }
-                            else { $sc = 'success'; $st = 'AMAN'; $pc = '#10b981'; $bgc = '#ecfdf5'; }
+                            $points = $student->net_points;
+                            $status = $student->point_status;
+                            $sc = $status['sp'] !== 'Normal' ? 'danger' : 'success';
+                            $st = $status['label'];
+                            $pc = $status['color'];
+                            $bgc = $status['bg'];
                         @endphp
                         <tr style="animation: fadeInUp 0.4s ease-out backwards; animation-delay: {{ $loop->index * 0.05 }}s;">
                             <td style="text-align: center;">
@@ -145,9 +144,9 @@
                             </td>
                             <td>
                                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <span style="font-weight: 900; font-size: 0.9375rem; color: {{ $pc }}; width: 28px;">{{ $points }}</span>
+                                    <span style="font-weight: 900; font-size: 0.9375rem; color: {{ $pc }}; width: 28px;">{{ $points > 0 ? '+' : '' }}{{ $points }}</span>
                                     <div style="flex: 1; height: 6px; background: #f1f5f9; border-radius: 10px; min-width: 80px; overflow: hidden; border: 1px solid var(--border-light);">
-                                        <div style="width: {{ min(($points/150)*100, 100) }}%; height: 100%; background: {{ $pc }}; border-radius: 10px; transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+                                        <div style="width: {{ min((max(0, -$points)/150)*100, 100) }}%; height: 100%; background: {{ $pc }}; border-radius: 10px; transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
                                     </div>
                                 </div>
                             </td>

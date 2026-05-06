@@ -103,23 +103,17 @@ class StudentController extends Controller
     public function getPoints(Student $student)
     {
         $student->load(['behaviorRecords.violationType', 'behaviorRecords.vitaminType']);
-        $vPoints = $student->behaviorRecords->whereNotNull('violation_type_id')->sum(fn($r) => $r->violationType->points ?? 0);
-        $aPoints = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sum(fn($r) => $r->vitaminType->points ?? 0);
-        $points = max(0, $vPoints - $aPoints);
-
-        if ($points > 100) { $status = 'KRITIS'; $color = 'danger'; }
-        elseif ($points > 50) { $status = 'WASPADA'; $color = 'warning'; }
-        elseif ($points > 20) { $status = 'BAIK'; $color = 'info'; }
-        else { $status = 'AMAN'; $color = 'success'; }
+        $status = $student->point_status;
+        $colorMap = ['SEHAT' => 'primary', 'AMAN' => 'success', 'BAIK' => 'info', 'WASPADA' => 'warning', 'KRITIS' => 'danger'];
 
         return response()->json([
             'name' => $student->name,
             'nisn' => $student->nisn,
-            'points' => $points,
-            'violation_points' => $vPoints,
-            'vitamin_points' => $aPoints,
-            'status' => $status,
-            'color' => $color,
+            'points' => $student->net_points,
+            'violation_points' => $student->violation_points,
+            'vitamin_points' => $student->vitamin_points,
+            'status' => $status['label'],
+            'color' => $colorMap[$status['label']] ?? 'success',
         ]);
     }
 
@@ -133,15 +127,12 @@ class StudentController extends Controller
         $violationRecords = $student->behaviorRecords->whereNotNull('violation_type_id')->sortByDesc('date');
         $vitaminRecords   = $student->behaviorRecords->whereNotNull('vitamin_type_id')->sortByDesc('date');
 
-        $totalViolation = $violationRecords->sum(fn($r) => $r->violationType->points ?? 0);
-        $totalVitamin   = $vitaminRecords->sum(fn($r) => $r->vitaminType->points ?? 0);
-        $netPoints      = $totalViolation - $totalVitamin;  // bisa negatif jika vitamin > penyakit
-        $netDisplay     = max(0, $netPoints);               // tampilan poin bersih tidak boleh negatif
-
-        if ($netDisplay > 100)     { $statusText = 'ZONA MERAH — KRITIS';   $statusSP = 'SP III'; }
-        elseif ($netDisplay > 50)  { $statusText = 'ZONA KUNING — WASPADA'; $statusSP = 'SP II'; }
-        elseif ($netDisplay > 20)  { $statusText = 'ZONA BIRU — PERHATIAN'; $statusSP = 'SP I'; }
-        else                       { $statusText = 'ZONA HIJAU — AMAN';      $statusSP = 'Normal'; }
+        $totalViolation = $student->violation_points;
+        $totalVitamin   = $student->vitamin_points;
+        $netPoints      = $student->net_points;
+        $status         = $student->point_status;
+        $statusText     = $status['zone'];
+        $statusSP       = $status['sp'];
 
         // Generate nomor surat: SP/SIPINTAR/[ID]/[BULAN-ROMAWI]/[TAHUN]
         $bulanRomawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
@@ -171,7 +162,7 @@ class StudentController extends Controller
 
         return view('students.letter', compact(
             'student', 'violationRecords', 'vitaminRecords',
-            'totalViolation', 'totalVitamin', 'netPoints', 'netDisplay',
+            'totalViolation', 'totalVitamin', 'netPoints',
             'statusText', 'statusSP', 'nomorSurat',
             'chartLabels', 'chartVitaminData', 'chartViolationData'
         ));
