@@ -132,7 +132,19 @@
                     $markerTransform = $chartPercent == 0
                         ? 'translateY(-50%)'
                         : ($chartPercent == 100 ? 'translate(-100%, -50%)' : 'translate(-50%, -50%)');
-                    $fillColor = $netPoints > 0 ? 'rgba(16,185,129,0.16)' : 'rgba(239,68,68,0.14)';
+                        
+                    if ($netPoints > 0) {
+                        $fillColor = 'rgba(6, 182, 212, 0.2)'; // cyan
+                    } elseif (-$netPoints <= 20) {
+                        $fillColor = 'rgba(16, 185, 129, 0.2)'; // emerald
+                    } elseif (-$netPoints <= 50) {
+                        $fillColor = 'rgba(59, 130, 246, 0.2)'; // blue
+                    } elseif (-$netPoints <= 100) {
+                        $fillColor = 'rgba(245, 158, 11, 0.2)'; // amber
+                    } else {
+                        $fillColor = 'rgba(239, 68, 68, 0.2)'; // red
+                    }
+
                     $markerLabel = $netPoints > 0 ? 'SEHAT' : $status['label'];
                 @endphp
                 <div style="margin-top: 1.5rem;">

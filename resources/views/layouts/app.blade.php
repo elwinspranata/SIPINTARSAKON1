@@ -26,6 +26,7 @@
             border: 1px solid rgba(0, 210, 106, 0.1);
         }
     </style>
+    @stack('styles')
 </head>
 <body>
     <div class="dashboard-container">
@@ -41,7 +42,7 @@
                         <span class="logo-text-si">SI</span> <span class="logo-text-pintar">PINTAR</span>
                     </span>
                 </a>
-                <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" style="background: var(--primary-light); border: none; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary); flex-shrink: 0;">
+                <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" style="background: var(--primary-light); border: none; width: 36px; height: 36px; border-radius: 10px; align-items: center; justify-content: center; cursor: pointer; color: var(--primary); flex-shrink: 0;">
                     <i data-lucide="x" size="18"></i>
                 </button>
             </div>

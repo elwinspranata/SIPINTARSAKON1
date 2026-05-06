@@ -81,7 +81,7 @@
                     <i data-lucide="clock" style="width: 20px; height: 20px; color: var(--primary);"></i> Aktivitas Terbaru
                 </h3>
                 <div style="display: flex; gap: 0.5rem;">
-                    <a href="{{ route('records.recap') }}" class="btn" style="background: var(--primary-light); color: var(--primary); padding: 0.4rem 0.8rem; font-size: 0.75rem; border-radius: 10px; font-weight: 800; border: 1px solid rgba(0, 210, 106, 0.1);">Rekap Kolektif</a>
+                
                     <a href="{{ route('records.index') }}" class="btn" style="background: var(--bg); color: var(--primary); padding: 0.4rem 0.8rem; font-size: 0.75rem; border-radius: 10px; font-weight: 800; border: 1px solid var(--border-light);">Riwayat</a>
                 </div>
             </div>

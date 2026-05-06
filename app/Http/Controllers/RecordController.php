@@ -15,18 +15,42 @@ class RecordController extends Controller
     {
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
+        $search = $request->get('search');
+        $classId = $request->get('class_id');
 
-        $students = Student::with(['schoolClass', 'behaviorRecords' => function($query) use ($startDate, $endDate) {
-            if ($startDate) {
-                $query->where('date', '>=', $startDate);
+        $query = Student::with([
+            'schoolClass',
+            'behaviorRecords' => function ($query) use ($startDate, $endDate) {
+                if ($startDate) {
+                    $query->where('date', '>=', $startDate);
+                }
+                if ($endDate) {
+                    $query->where('date', '<=', $endDate);
+                }
+                $query->with(['violationType', 'vitaminType']);
             }
-            if ($endDate) {
-                $query->where('date', '<=', $endDate);
-            }
-            $query->with(['violationType', 'vitaminType']);
-        }])->get();
+        ]);
 
-        return view('records.recap', compact('students', 'startDate', 'endDate'));
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('nisn', 'like', "%{$search}%");
+            });
+        }
+
+        if ($classId) {
+            $query->where('class_id', $classId);
+        }
+
+        $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
+        $students = (clone $query)->orderBy('name')->paginate(15)->withQueryString();
+        $summaryStudents = (clone $query)->get();
+
+        $totalStudents = $summaryStudents->count();
+        $avgScore = $summaryStudents->count() ? $summaryStudents->avg('net_points') : 0;
+        $criticalCount = $summaryStudents->filter(fn($s) => $s->point_status['label'] === 'KRITIS')->count();
+
+        return view('records.recap', compact('students', 'classes', 'startDate', 'endDate', 'search', 'classId', 'totalStudents', 'avgScore', 'criticalCount'));
     }
 
     public function index(Request $request)
@@ -50,7 +74,7 @@ class RecordController extends Controller
         $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
         $violation_types = ViolationType::all()->groupBy('category');
         $vitamin_types = VitaminType::all()->groupBy('category');
-        
+
         return view('records.create', compact('classes', 'violation_types', 'vitamin_types'));
     }
 
