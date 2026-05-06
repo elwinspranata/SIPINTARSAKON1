@@ -66,22 +66,22 @@ class Student extends Model
 
         // Jika poin lebih besar dari 0, berarti banyak Vitamin (+)
         if ($points > 0) {
-            return ['label' => 'SEHAT', 'color' => '#06b6d4', 'bg' => '#ecfeff', 'sp' => 'Normal', 'zone' => 'ZONA CYAN — SEHAT'];
+            return ['label' => 'AMAN', 'color' => '#06b6d4', 'bg' => '#ecfeff', 'sp' => 'Normal', 'zone' => 'ZONA AMAN — SEHAT'];
         }
 
         // Konversi poin negatif menjadi positif untuk dicek dengan batas Penyakit
         $penyakit = -$points;
 
         if ($penyakit <= 20) {
-            return ['label' => 'AMAN', 'color' => '#10b981', 'bg' => '#ecfdf5', 'sp' => 'Normal', 'zone' => 'ZONA HIJAU — AMAN'];
+            return ['label' => 'AMAN', 'color' => '#10b981', 'bg' => '#ecfdf5', 'sp' => 'Normal', 'zone' => 'ZONA AMAN'];
         }
         if ($penyakit <= 50) {
-            return ['label' => 'BAIK', 'color' => '#3b82f6', 'bg' => '#eff6ff', 'sp' => 'SP I', 'zone' => 'ZONA BIRU — BAIK'];
+            return ['label' => 'BAIK', 'color' => '#3b82f6', 'bg' => '#eff6ff', 'sp' => 'SP I', 'zone' => 'ZONA BAIK'];
         }
         if ($penyakit <= 100) {
-            return ['label' => 'WASPADA', 'color' => '#f59e0b', 'bg' => '#fffbeb', 'sp' => 'SP II', 'zone' => 'ZONA KUNING — WASPADA'];
+            return ['label' => 'WASPADA', 'color' => '#f59e0b', 'bg' => '#fffbeb', 'sp' => 'SP II', 'zone' => 'ZONA WASPADA'];
         }
 
-        return ['label' => 'KRITIS', 'color' => '#ef4444', 'bg' => '#fef2f2', 'sp' => 'SP III', 'zone' => 'ZONA MERAH — KRITIS'];
+        return ['label' => 'KRITIS', 'color' => '#ef4444', 'bg' => '#fef2f2', 'sp' => 'SP III', 'zone' => 'ZONA KRITIS'];
     }
 }
