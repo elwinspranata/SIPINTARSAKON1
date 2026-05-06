@@ -27,6 +27,11 @@ class StudentController extends Controller
             $query->where('class_id', $request->class_id);
         }
 
+        // Filter by gender
+        if ($request->filled('gender')) {
+            $query->where('gender', $request->gender);
+        }
+
         $students = $query->orderBy('name')->paginate(15)->withQueryString();
         $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
 

@@ -52,7 +52,8 @@
     </div>
 
     {{-- Filters --}}
-    <form method="GET" action="{{ route('students.index') }}">
+    <form id="mainFilterForm" method="GET" action="{{ route('students.index') }}">
+        <input type="hidden" name="gender" id="hiddenGenderFilter" value="{{ request('gender') }}">
         <div class="filter-bar">
             <div class="filter-search">
                 <i data-lucide="search" class="filter-search-icon" style="width: 16px; height: 16px;"></i>
@@ -114,10 +115,13 @@
                         kedisiplinan siswa</p>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                    <span
-                        style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">{{ $students->total() }}
-                        Siswa</span>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">{{ $students->total() }} Siswa</span>
                     <div style="width: 1px; height: 16px; background: var(--border);"></div>
+                    <select class="filter-select" style="border: 1px solid var(--border-light); background-color: #f8fafc; font-size: 0.75rem; font-weight: 700; color: var(--primary-dark); padding: 0.35rem 1.5rem 0.35rem 0.75rem; border-radius: 8px; height: auto;" onchange="document.getElementById('hiddenGenderFilter').value = this.value; document.getElementById('mainFilterForm').submit()">
+                        <option value="">Semua Gender</option>
+                        <option value="L" {{ request('gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="P" {{ request('gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
                     <span class="status-badge"
                         style="background: var(--primary-light); color: var(--primary); font-size: 0.65rem;">Hal
                         {{ $students->currentPage() }}</span>
