@@ -29,6 +29,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Records (Pelanggaran & Vitamin)
+    Route::get('/records/recap', [RecordController::class, 'recap'])->name('records.recap');
     Route::get('/records/create', [RecordController::class, 'create'])->name('records.create');
     Route::post('/records/store', [RecordController::class, 'store'])->name('records.store');
     Route::get('/records', [RecordController::class, 'index'])->name('records.index');

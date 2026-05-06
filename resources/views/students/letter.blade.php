@@ -229,8 +229,8 @@
                 <div class="kop-text">
                     <div class="provinsi">PEMERINTAH PROVINSI NUSA TENGGARA BARAT</div>
                     <div class="sma">SMA NEGERI 1 KOPANG</div>
-                    <div class="alamat">Jl. Segara Anak No. 5A Kopang Lombok Tengah ((0370) 6156250 Kode Pos 83553</div>
-                    <div class="kontak">Laman: www. smansa-kopang.sch.id Surel: sma_negeri1kopang@yahoo.co.id</div>
+                    <div class="alamat">Jl. Segara Anak No. 5A Kopang Lombok Tengah (0370) 6156250 Kode Pos 83553</div>
+                    <div class="kontak">Laman: www.smansa-kopang.sch.id Surel: sma_negeri1kopang@yahoo.co.id</div>
                 </div>
                 <img src="{{ asset('logo_sekolah.jpg') }}" class="logo-kanan" alt="Logo Sekolah">
             </div>

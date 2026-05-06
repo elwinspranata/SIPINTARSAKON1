@@ -11,6 +11,24 @@ use Illuminate\Http\Request;
 
 class RecordController extends Controller
 {
+    public function recap(Request $request)
+    {
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+
+        $students = Student::with(['schoolClass', 'behaviorRecords' => function($query) use ($startDate, $endDate) {
+            if ($startDate) {
+                $query->where('date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->where('date', '<=', $endDate);
+            }
+            $query->with(['violationType', 'vitaminType']);
+        }])->get();
+
+        return view('records.recap', compact('students', 'startDate', 'endDate'));
+    }
+
     public function index(Request $request)
     {
         $violation_records = BehaviorRecord::with(['student', 'user', 'violationType'])

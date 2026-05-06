@@ -76,7 +76,12 @@
                 
                 <a href="{{ route('records.index') }}" class="nav-link {{ request()->routeIs('records.index') ? 'active' : '' }}">
                     <i data-lucide="file-text" size="18"></i>
-                    <span>Laporan</span>
+                    <span>Riwayat Catatan</span>
+                </a>
+
+                <a href="{{ route('records.recap') }}" class="nav-link {{ request()->routeIs('records.recap') ? 'active' : '' }}">
+                    <i data-lucide="bar-chart-3" size="18"></i>
+                    <span>Rekap Kolektif</span>
                 </a>
 
                 @can('admin')
