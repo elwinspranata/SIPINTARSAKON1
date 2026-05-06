@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Pemberitahuan — {{ $student->name }}</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+        }
 
         body {
             font-family: 'Times New Roman', Times, serif;
             font-size: 12pt;
             color: #000;
             background: #f0faf3;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         /* ===== SCREEN: Preview wrapper ===== */
@@ -259,61 +265,129 @@
             {{-- ===== ISI ===== --}}
             <div class="body-text">
                 <p>
-                    Bapak/Ibu yang kami hormati , pendidikan adalah sebuah perjalanan panjang untuk membentuk insan yang tidak hanya cerdas secara intelektual , tetapi juga sehat secara karakter . Di SMAN 1 Kopang , kami menjalankan program "Si Pintar" yang memandang perilaku menyimpang bukan sebagai kejahatan , melainkan sebagai " penyakit " karakter yang memerlukan " resep " atau penanganan yang tepat agar siswa dapat kembali pulih dan berkembang dengan baik .
+                    Bapak/Ibu yang kami hormati, pendidikan adalah sebuah perjalanan panjang untuk membentuk insan yang tidak hanya cerdas secara intelektual, tetapi juga sehat secara karakter. Di SMAN 1 Kopang, kami menjalankan program "Si Pintar" yang memandang perilaku menyimpang bukan sebagai kejahatan, melainkan sebagai "penyakit" karakter yang memerlukan "resep" atau penanganan yang tepat agar siswa dapat kembali pulih dan berkembang dengan baik.
                 </p>
                 <p>
-                    Melalui surat ini , kami ingin menginformasikan hasil pemantauan Rekam Medis Karakter putra / putri Bapak/Ibu. Saat ini , akumulasi poin pelanggaran ( gejala ) yang bersangkutan telah mencapai ambang batas yang memerlukan perhatian khusus ({{ explode(' — ', $statusText)[0] }}). Berdasarkan mekanisme program, kondisi ini memerlukan kolaborasi erat antara pihak sekolah dan orang tua agar kami dapat memberikan " resep " pembinaan yang paling sesuai .
+                    Melalui surat ini, kami ingin menginformasikan hasil pemantauan Rekam Medis Karakter putra/putri Bapak/Ibu. Saat ini, akumulasi poin pelanggaran (gejala) yang bersangkutan telah mencapai ambang batas yang memerlukan perhatian khusus (Zona Merah). Berdasarkan mekanisme program, kondisi ini memerlukan kolaborasi erat antara pihak sekolah dan orang tua agar kami dapat memberikan "resep" pembinaan yang paling sesuai.
                 </p>
                 <p>
-                    Adapun rincian diagnosa perilaku / pelanggaran yang telah tercatat adalah sebagai berikut :
+                    Adapun rincian diagnosa perilaku/pelanggaran yang telah tercatat adalah sebagai berikut:
                 </p>
             </div>
 
             {{-- ===== TABEL PELANGGARAN ===== --}}
-            <table class="tabel-pelanggaran">
-                <thead>
+            <table class="tabel-pelanggaran" style="border-collapse: collapse; width: 100%; border: 1px solid #000;">
+                <thead style="background-color: #1B6B3A; color: white;">
                     <tr>
-                        <th style="width: 40px;">NO</th>
-                        <th style="width: 120px;">Tanggal</th>
-                        <th>Jenis Pelanggaran ( Diagnosa )</th>
-                        <th style="width: 150px;">Bobot Point ( Gejala )</th>
+                        <th style="width: 40px; padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">NO</th>
+                        <th style="width: 120px; padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">Tanggal</th>
+                        <th style="padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">Jenis Pelanggaran (Diagnosa)</th>
+                        <th style="width: 150px; padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">Bobot Point (Gejala)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php $i = 1; @endphp
                     @forelse($violationRecords as $record)
                     <tr>
-                        <td class="no">{{ $i++ }}</td>
-                        <td>{{ \Carbon\Carbon::parse($record->date)->translatedFormat('d F Y') }}</td>
-                        <td>{{ $record->violationType->name ?? '-' }}</td>
-                        <td class="poin">{{ $record->violationType->points ?? 0 }}</td>
+                        <td class="no" style="padding: 8px; border: 1px solid #000; text-align: center;">{{ $i++ }}</td>
+                        <td style="padding: 8px; border: 1px solid #000;">{{ \Carbon\Carbon::parse($record->date)->translatedFormat('d F Y') }}</td>
+                        <td style="padding: 8px; border: 1px solid #000;">{{ $record->violationType->name ?? '-' }}</td>
+                        <td class="poin" style="padding: 8px; border: 1px solid #000; text-align: center; color: #ef4444; font-weight: bold;">-{{ $record->violationType->points ?? 0 }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td class="no">1</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="no" style="padding: 8px; border: 1px solid #000; text-align: center;">1</td>
+                        <td style="padding: 8px; border: 1px solid #000;"></td>
+                        <td style="padding: 8px; border: 1px solid #000;">Belum ada catatan pelanggaran</td>
+                        <td style="padding: 8px; border: 1px solid #000;"></td>
                     </tr>
                     @endforelse
-                    <tr class="total-row">
-                        <td colspan="3" style="text-align: right; padding-right: 15px;">Total Akumulasi Point</td>
-                        <td class="poin">{{ $totalViolation }}</td>
+                    <tr class="total-row" style="background-color: #e8f5e9;">
+                        <td colspan="3" style="text-align: right; padding-right: 15px; border: 1px solid #000; font-weight: bold; background-color: #e8f5e9 !important;">Total Akumulasi Point</td>
+                        <td class="poin" style="padding: 8px; border: 1px solid #000; text-align: center; font-weight: bold; color: #000; background-color: #e8f5e9 !important;">{{ $totalViolation }}</td>
                     </tr>
                 </tbody>
             </table>
 
-            {{-- ===== GRAFIK ===== --}}
-            <div style="margin: 20px 0;">
-                <p style="font-weight: bold; margin-bottom: 10px;">Berikut trend grafik perilaku siswa :</p>
-                <div style="height: 200px; width: 100%;">
-                    <canvas id="behaviorChart"></canvas>
-                </div>
+            <div class="body-text" style="margin-top: 15px;">
+                <p style="font-weight: bold; margin-bottom: 10px;">Adapun rincian vitamin/prestasi/kebaikan yang telah tercatat adalah sebagai berikut :</p>
             </div>
 
-            {{-- ===== STATUS ===== --}}
-            <div class="status-box">
-                Status Saat ini : {{ $statusSP }} .
+            {{-- ===== TABEL VITAMIN ===== --}}
+            <table class="tabel-pelanggaran" style="border-collapse: collapse; width: 100%; border: 1px solid #000;">
+                <thead style="background-color: #1B6B3A; color: white;">
+                    <tr>
+                        <th style="width: 40px; padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">NO</th>
+                        <th style="width: 120px; padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">Tanggal</th>
+                        <th style="padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">Jenis Vitamin / Prestasi (Diagnosa)</th>
+                        <th style="width: 150px; padding: 8px; border: 1px solid #000; background-color: #1B6B3A; color: white !important;">Bobot Point (Gejala)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($vitaminRecords as $record)
+                    <tr>
+                        <td class="no" style="padding: 8px; border: 1px solid #000; text-align: center;">{{ $i++ }}</td>
+                        <td style="padding: 8px; border: 1px solid #000;">{{ \Carbon\Carbon::parse($record->date)->translatedFormat('d F Y') }}</td>
+                        <td style="padding: 8px; border: 1px solid #000;">{{ $record->vitaminType->name ?? '-' }}</td>
+                        <td class="poin" style="padding: 8px; border: 1px solid #000; text-align: center; color: #10b981; font-weight: bold;">+{{ $record->vitaminType->points ?? 0 }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td class="no" style="padding: 8px; border: 1px solid #000; text-align: center;">{{ $i }}</td>
+                        <td style="padding: 8px; border: 1px solid #000;"></td>
+                        <td style="padding: 8px; border: 1px solid #000;">Belum ada catatan vitamin/prestasi</td>
+                        <td style="padding: 8px; border: 1px solid #000;"></td>
+                    </tr>
+                    @endforelse
+                    <tr class="total-row" style="background-color: #e8f5e9;">
+                        <td colspan="3" style="text-align: right; padding-right: 15px; border: 1px solid #000; font-weight: bold; background-color: #e8f5e9 !important;">Total Akumulasi Point</td>
+                        <td class="poin" style="padding: 8px; border: 1px solid #000; text-align: center; font-weight: bold; color: #000; background-color: #e8f5e9 !important;">{{ $totalVitamin }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr style="border: none; border-top: 15px solid #f1f5f9; margin: 30px 0;">
+
+            {{-- ===== TOTAL AKUMULASI PENGURANGAN ===== --}}
+            <table style="width: 100%; font-size: 12pt; border-collapse: collapse; margin-bottom: 25px;">
+                <tr>
+                    <td style="width: 250px; padding: 5px 0;">Total Poin Penyakit</td>
+                    <td style="padding: 5px 0;">: <strong style="color: #ef4444;">-{{ $totalViolation }} poin</strong></td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px 0;">Total Poin Vitamin</td>
+                    <td style="padding: 5px 0;">: <strong style="color: #10b981;">+{{ $totalVitamin }} poin</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 0;"><hr style="border: none; border-top: 2px solid #000; margin: 5px 0; width: 68%;"></td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px 0;"><strong>Total Akumulasi Poin Bersih</strong></td>
+                    <td style="padding: 5px 0;">: <strong>{{ abs($netPoints) }} poin</strong></td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px 0;"><strong>Status Saat Ini</strong></td>
+                    <td style="padding: 5px 0;">: <strong>{{ $statusText }}</strong> ({{ $statusSP }})</td>
+                </tr>
+            </table>
+
+            {{-- ===== GRAFIK TREN PERILAKU ===== --}}
+            <div style="margin-top: 24px; margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                    <div>
+                        <div style="font-size: 11pt; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                            <span>📈 Tren Perilaku Siswa</span>
+                        </div>
+                        <div style="font-size: 9pt; color: #64748b; margin-top: 2px;">Perbandingan vitamin vs penyakit (6 bulan terakhir)</div>
+                    </div>
+                    <div style="display: flex; gap: 12px; font-size: 9pt; font-weight: bold; background: #f8fafc; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0; align-items: center;">
+                        <span style="display: flex; align-items: center; gap: 6px; color: #334155;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Vitamin</span>
+                        <span style="display: flex; align-items: center; gap: 6px; color: #334155; margin-left: 8px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Penyakit</span>
+                    </div>
+                </div>
+                <div style="height: 180px; width: 100%; position: relative;">
+                    <canvas id="behaviorChart"></canvas>
+                </div>
             </div>
 
             {{-- ===== UNDANGAN ===== --}}
