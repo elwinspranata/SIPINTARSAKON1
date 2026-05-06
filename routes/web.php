@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
 // Main authenticated + approved routes
 Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Records (Pelanggaran & Vitamin)
     Route::get('/records/create', [RecordController::class, 'create'])->name('records.create');
     Route::post('/records/store', [RecordController::class, 'store'])->name('records.store');
@@ -41,6 +41,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
     Route::delete('/students/bulk-delete', [StudentController::class, 'bulkDestroy'])->name('students.bulkDestroy');
+    Route::post('/students/reset-points', [StudentController::class, 'resetPoints'])->name('students.resetPoints');
     Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
     Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
@@ -86,4 +87,4 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
