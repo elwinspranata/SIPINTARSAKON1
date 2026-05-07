@@ -141,10 +141,10 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                    labels: @json($chartLabels),
                     datasets: [{
                         label: 'Vitamin',
-                        data: [12, 19, 15, 25, 22, 30],
+                        data: @json($chartVitaminData),
                         borderColor: '#10b981',
                         backgroundColor: gradientVitamin,
                         fill: true,
@@ -157,7 +157,7 @@
                         pointHoverBorderWidth: 3
                     }, {
                         label: 'Penyakit',
-                        data: [8, 12, 10, 15, 12, 18],
+                        data: @json($chartViolationData),
                         borderColor: '#ef4444',
                         backgroundColor: gradientPenyakit,
                         fill: true,

@@ -159,6 +159,13 @@
                     <span>{{ session('success') }}</span>
                 </div>
                 @endif
+
+                @if(session('error'))
+                <div style="background: #fef2f2; color: #ef4444; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 2rem; font-weight: 700; font-size: 0.875rem; display: flex; align-items: center; gap: 0.75rem; border: 1px solid rgba(239, 68, 68, 0.1); animation: fadeInUp 0.4s ease-out;">
+                    <i data-lucide="alert-circle" size="18"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                @endif
                 
                 @isset($slot) {{ $slot }} @else @yield('content') @endisset
             </div>

@@ -372,7 +372,7 @@
  @push('scripts')
     <script>
         window.onbeforeprint = function() {
-            this.originalTitle = docum ent.title;
+            this.originalTitle = document.title;
             document.title = "";
         };
         window.onafterprint = function() {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\BehaviorRecord;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -30,6 +31,33 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboard', compact('stats', 'recent_violations', 'recent_vitamins'));
+        // Chart data: last 6 months
+        $chartLabels = [];
+        $chartVitaminData = [];
+        $chartViolationData = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $chartLabels[] = $date->translatedFormat('M');
+            $startOfMonth = $date->copy()->startOfMonth()->toDateString();
+            $endOfMonth = $date->copy()->endOfMonth()->toDateString();
+
+            $chartVitaminData[] = BehaviorRecord::whereNotNull('vitamin_type_id')
+                ->whereBetween('date', [$startOfMonth, $endOfMonth])
+                ->count();
+
+            $chartViolationData[] = BehaviorRecord::whereNotNull('violation_type_id')
+                ->whereBetween('date', [$startOfMonth, $endOfMonth])
+                ->count();
+        }
+
+        return view('dashboard', compact(
+            'stats',
+            'recent_violations',
+            'recent_vitamins',
+            'chartLabels',
+            'chartVitaminData',
+            'chartViolationData'
+        ));
     }
 }
