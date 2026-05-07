@@ -154,18 +154,18 @@
                 </div>
             </div>
 
-            <!-- Card Rata-rata Skor -->
+            <!-- Card Siswa Sehat -->
             <div class="card"
                 style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; border: 1px solid var(--border-light); background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
                 <div
-                    style="width: 56px; height: 56px; border-radius: 16px; background: #ecfdf5; color: #10b981; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="trending-up" style="width: 28px; height: 28px;"></i>
+                    style="width: 56px; height: 56px; border-radius: 16px; background: #ecfef9; color: #06b6d4; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="check-circle" style="width: 28px; height: 28px;"></i>
                 </div>
                 <div>
                     <div
                         style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
-                        Rata-rata Skor</div>
-                    <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">{{ number_format($avgScore, 1) }}
+                        Siswa Sehat</div>
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #0891b2;">{{ $healthyCount }}
                     </div>
                 </div>
             </div>
@@ -205,13 +205,14 @@
                     </div>
                 </div>
 
-                <form action="{{ route('records.recap') }}" method="GET"
+                <form id="recapFilterForm" action="{{ route('records.recap') }}" method="GET"
                     style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-light);">
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <label
                             style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Dari
                             Tanggal</label>
                         <input type="date" name="start_date" value="{{ $startDate }}"
+                            onchange="document.getElementById('recapFilterForm').submit()"
                             style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.8125rem; outline: none; background: white;">
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -219,6 +220,7 @@
                             style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Sampai
                             Tanggal</label>
                         <input type="date" name="end_date" value="{{ $endDate }}"
+                            onchange="document.getElementById('recapFilterForm').submit()"
                             style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.8125rem; outline: none; background: white;">
                     </div>
                     <button type="submit" class="btn"
@@ -231,7 +233,7 @@
                         Reset
                     </a>
 
-                    <div style="flex: 1; min-width: 200px; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                    <div style="flex: 1; min-width: 200px; display: flex; gap: 0.5rem; justify-content: flex-end; flex-wrap: wrap;">
                         <div style="position: relative; width: 100%; max-width: 200px;">
                             <i data-lucide="search"
                                 style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-muted);"></i>
@@ -240,12 +242,23 @@
                                 style="width: 100%; padding: 0.5rem 1rem 0.5rem 2.25rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.75rem; outline: none;">
                         </div>
                         <select id="classFilter" name="class_id"
+                            onchange="document.getElementById('recapFilterForm').submit()"
                             style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.75rem; outline: none; background: white;">
                             <option value="">Semua Kelas</option>
                             @foreach($classes as $class)
                                 <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>
                                     {{ $class->name }}</option>
                             @endforeach
+                        </select>
+                        <select id="statusFilter" name="status"
+                            onchange="document.getElementById('recapFilterForm').submit()"
+                            style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.75rem; outline: none; background: white;">
+                            <option value="">Semua Status</option>
+                            <option value="SEHAT" {{ request('status') == 'SEHAT' ? 'selected' : '' }}>Sehat</option>
+                            <option value="AMAN" {{ request('status') == 'AMAN' ? 'selected' : '' }}>Aman</option>
+                            <option value="BAIK" {{ request('status') == 'BAIK' ? 'selected' : '' }}>Baik</option>
+                            <option value="WASPADA" {{ request('status') == 'WASPADA' ? 'selected' : '' }}>Waspada</option>
+                            <option value="KRITIS" {{ request('status') == 'KRITIS' ? 'selected' : '' }}>Kritis</option>
                         </select>
                     </div>
                 </form>
@@ -364,13 +377,35 @@
 </div>
  @push('scripts')
     <script>
+        (function () {
+            const filterForm = document.getElementById('recapFilterForm');
+            const searchInput = document.getElementById('searchInput');
+
+            if (searchInput && filterForm) {
+                let debounceTimer;
+
+                const submitFilter = () => {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => filterForm.submit(), 300);
+                };
+
+                searchInput.addEventListener('input', submitFilter);
+                searchInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        filterForm.submit();
+                    }
+                });
+            }
+        })();
+
         window.onbeforeprint = function() {
             this.originalTitle = document.title;
             document.title = "";
         };
         window.onafterprint = function() {
-                document.title = this.originalTitle;
-            };
-        </script>
+            document.title = this.originalTitle;
+        };
+    </script>
 @endpush
 </x-app-layout>

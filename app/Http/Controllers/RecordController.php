@@ -8,6 +8,8 @@ use App\Models\ViolationType;
 use App\Models\VitaminType;
 use App\Models\BehaviorRecord;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class RecordController extends Controller
 {
@@ -17,6 +19,7 @@ class RecordController extends Controller
         $endDate = $request->get('end_date');
         $search = $request->get('search');
         $classId = $request->get('class_id');
+        $status = $request->get('status');
 
         $query = Student::with([
             'schoolClass',
@@ -43,14 +46,30 @@ class RecordController extends Controller
         }
 
         $classes = SchoolClass::where('is_active', true)->orderBy('tingkat')->orderBy('name')->get();
-        $students = (clone $query)->orderBy('name')->paginate(15)->withQueryString();
-        $summaryStudents = (clone $query)->get();
+        $summaryStudents = (clone $query)->orderBy('name')->get();
+
+        if ($status) {
+            $status = strtoupper($status);
+            $summaryStudents = $summaryStudents->filter(fn($s) => $s->point_status['label'] === $status)->values();
+            $students = new LengthAwarePaginator(
+                $summaryStudents->forPage(Paginator::resolveCurrentPage(), 15),
+                $summaryStudents->count(),
+                15,
+                Paginator::resolveCurrentPage(),
+                [
+                    'path' => Paginator::resolveCurrentPath(),
+                    'query' => request()->except('page'),
+                ]
+            );
+        } else {
+            $students = (clone $query)->orderBy('name')->paginate(15)->withQueryString();
+        }
 
         $totalStudents = $summaryStudents->count();
-        $avgScore = $summaryStudents->count() ? $summaryStudents->avg('net_points') : 0;
+        $healthyCount = $summaryStudents->filter(fn($s) => $s->point_status['label'] === 'SEHAT')->count();
         $criticalCount = $summaryStudents->filter(fn($s) => $s->point_status['label'] === 'KRITIS')->count();
 
-        return view('records.recap', compact('students', 'classes', 'startDate', 'endDate', 'search', 'classId', 'totalStudents', 'avgScore', 'criticalCount'));
+        return view('records.recap', compact('students', 'classes', 'startDate', 'endDate', 'search', 'classId', 'status', 'totalStudents', 'healthyCount', 'criticalCount'));
     }
 
     public function index(Request $request)

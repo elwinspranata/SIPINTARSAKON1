@@ -66,7 +66,7 @@ class Student extends Model
 
         // Jika poin lebih besar dari 0, berarti banyak Vitamin (+)
         if ($points > 0) {
-            return ['label' => 'AMAN', 'color' => '#06b6d4', 'bg' => '#ecfeff', 'sp' => 'Normal', 'zone' => 'ZONA AMAN — SEHAT'];
+            return ['label' => 'SEHAT', 'color' => '#06b6d4', 'bg' => '#ecfeff', 'sp' => 'Normal', 'zone' => 'ZONA SEHAT'];
         }
 
         // Konversi poin negatif menjadi positif untuk dicek dengan batas Penyakit
