@@ -342,18 +342,11 @@
                 </table>
             </div>
 
-                   
-            <!-- Pagination Controls -->
-    
-                   
-                           <div class="no-print" style="padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; border-top: 1px solid var(--border-light); background: #ffffff;">
-                <div style="font-size: 0.8125rem; color: #64748b; font-weight: 600;">
-                    Menampilkan <span style="font-weight: 800; color: #1e293b;">{{ $students->firstItem() ?? 0 }}</span> s/d <span style="font-weight: 800; color: #1e293b;">{{ $students->lastItem() ?? 0 }}</span> dari <span style="font-weight: 800; color: #1e293b;">{{ $students->total() }}</span> hasil
+            @if($students->hasPages())
+                <div class="no-print" style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--border-light); background: #fcfdfe;">
+                    {{ $students->onEachSide(1)->links('vendor.pagination.custom') }}
                 </div>
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                {{ $students->onEachSide(1)->links('vendor.pagination.custom') }}
-                </div>
-            </div>
+            @endif
     
             <div class="print-only">
                 <div style="margin-top: 40px; display: flex; justify-content: flex-end; padding: 0 40px;">

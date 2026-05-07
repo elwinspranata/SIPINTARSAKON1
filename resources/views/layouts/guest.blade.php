@@ -322,10 +322,14 @@
                 padding: 0.25rem 0.6rem;
             }
         }
+
         /* ===== WELCOME MODAL ===== */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(10, 20, 14, 0.75);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -339,8 +343,13 @@
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .modal-overlay.closing {
@@ -348,8 +357,13 @@
         }
 
         @keyframes modalFadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
         }
 
         .modal-card {
@@ -359,15 +373,22 @@
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.3),
-                        0 0 0 1px rgba(255, 255, 255, 0.1);
+                0 0 0 1px rgba(255, 255, 255, 0.1);
             transform: translateY(30px) scale(0.96);
             animation: modalSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
             position: relative;
         }
 
         @keyframes modalSlideUp {
-            from { transform: translateY(30px) scale(0.96); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
+            from {
+                transform: translateY(30px) scale(0.96);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
         }
 
         .modal-overlay.closing .modal-card {
@@ -375,8 +396,15 @@
         }
 
         @keyframes modalSlideDown {
-            from { transform: translateY(0) scale(1); opacity: 1; }
-            to { transform: translateY(20px) scale(0.97); opacity: 0; }
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(20px) scale(0.97);
+                opacity: 0;
+            }
         }
 
         .modal-header {
@@ -497,7 +525,7 @@
             align-items: flex-start;
         }
 
-        .modal-point + .modal-point {
+        .modal-point+.modal-point {
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid #e0f0e5;
@@ -605,12 +633,13 @@
 
         @media (max-width: 480px) {
             .modal-overlay {
-                padding: 1rem;
-                align-items: flex-end;
+                padding: 1rem 0.75rem;
+                align-items: center;
+                justify-content: center;
             }
 
             .modal-card {
-                border-radius: 20px 20px 16px 16px;
+                border-radius: 20px;
                 max-height: 90vh;
             }
 
@@ -659,7 +688,7 @@
                 <div class="modal-welcome-title">Selamat Datang di Si Pintar</div>
 
                 <p class="modal-welcome-desc">
-                    Selamat datang ke <strong>Sistem Pembinaan Integritas Terpadu (Si Pintar) SMAN 1 Kopang</strong>, 
+                    Selamat datang ke <strong>Sistem Pembinaan Integritas Terpadu (Si Pintar) SMAN 1 Kopang</strong>,
                     <em>"Sehat Karakternya, Pintar Orangnya"</em>.
                 </p>
 
@@ -667,19 +696,24 @@
                     <div class="modal-point">
                         <div class="modal-point-dot"></div>
                         <div class="modal-point-text">
-                            Program ini hadir sebagai <strong>partner dan penunjang terbaik</strong> dalam membentuk pribadi pelajar yang berintegritas, menyembuhkan tabiat negatif dengan pendekatan ala medis yang humanis.
+                            Program ini hadir sebagai <strong>partner dan penunjang terbaik</strong> dalam membentuk
+                            pribadi pelajar yang berintegritas, menyembuhkan tabiat negatif dengan pendekatan ala medis
+                            yang humanis.
                         </div>
                     </div>
                     <div class="modal-point">
                         <div class="modal-point-dot"></div>
                         <div class="modal-point-text">
-                            Demi mewujudkan generasi yang : <strong>SAMPURNE RAGE ILMU ATE</strong> &mdash; Sempurna dalam akhlak, Semangat dalam menuntut ilmu, Berilmu pengetahuan luas, dan Berjiwa hati yang bersih.
+                            Demi mewujudkan generasi yang : <strong>SAMPURNE RAGE ILMU ATE</strong> &mdash; Sempurna
+                            dalam akhlak, Semangat dalam menuntut ilmu, Berilmu pengetahuan luas, dan Berjiwa hati yang
+                            bersih.
                         </div>
                     </div>
                 </div>
 
                 <p class="modal-disclaimer">
-                    Dengan melanjutkan penggunaan layanan ini, Anda dianggap telah memahami dan menyetujui seluruh ketentuan yang berlaku di <strong>SMAN 1 Kopang</strong>.
+                    Dengan melanjutkan penggunaan layanan ini, Anda dianggap telah memahami dan menyetujui seluruh
+                    ketentuan yang berlaku di <strong>SMAN 1 Kopang</strong>.
                 </p>
             </div>
 
