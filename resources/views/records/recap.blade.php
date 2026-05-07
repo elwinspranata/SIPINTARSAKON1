@@ -103,6 +103,56 @@
                     /* Hapus header/footer bawaan browser (URL, Tanggal, dll) */
                 }
             }
+
+            @media (max-width: 768px) {
+                .filter-bar {
+                    flex-direction: column;
+                    gap: 1rem !important;
+                }
+                .filter-bar .filter-search {
+                    width: 100%;
+                }
+                .filter-buttons {
+                    width: 100%;
+                }
+                .filter-buttons .btn {
+                    flex: 1;
+                    justify-content: center;
+                }
+                .recap-header {
+                    flex-direction: column !important;
+                    align-items: stretch !important;
+                    gap: 1rem !important;
+                }
+                .recap-header-main {
+                    flex-direction: column;
+                    align-items: flex-start !important;
+                    gap: 1rem !important;
+                }
+                .recap-filters {
+                    width: 100%;
+                    gap: 0.5rem !important;
+                }
+                .date-filter-container {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+                .filter-select {
+                    flex: 1 1 45%;
+                }
+                .filter-divider {
+                    display: none;
+                }
+                .print-btn {
+                    width: 100%;
+                    justify-content: center;
+                    margin-top: 0.5rem;
+                }
+                .recap-summary {
+                    width: 100%;
+                    justify-content: center !important;
+                }
+            }
         </style>
     @endpush
 
@@ -186,82 +236,75 @@
             </div>
         </div>
 
+        {{-- Filters --}}
+        <form id="recapFilterForm" method="GET" action="{{ route('records.recap') }}" class="no-print">
+            <div class="filter-bar" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <div class="filter-search" style="flex: 1; min-width: 200px;">
+                    <i data-lucide="search" class="filter-search-icon" style="width: 16px; height: 16px;"></i>
+                    <input type="text" id="searchInput" name="search" class="filter-input" style="border: none; background: transparent; width: 100%; outline: none;"
+                        placeholder="Cari nama atau NISN..." value="{{ request('search') }}">
+                </div>
+                <div class="filter-buttons" style="display: flex; gap: 0.5rem;">
+                    <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1.25rem; border-radius: 12px;">
+                        <i data-lucide="filter" style="width: 14px; height: 14px;"></i> <span>Filter</span>
+                    </button>
+                    <a href="{{ route('records.recap') }}" class="btn btn-outline" style="padding: 0.5rem 1rem; border-radius: 12px;" title="Reset Filter">
+                        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+
         <div class="card"
             style="padding: 0; overflow: hidden; border: 1px solid var(--border-light); animation: fadeInUp 0.4s ease-out;">
-            <div class="no-print"
-                style="padding: 1.25rem 1.5rem; background: #ffffff; border-bottom: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="no-print recap-header"
+                style="padding: 1.5rem; border-bottom: 1px solid var(--border-light); background: linear-gradient(to right, #f8fafc, #ffffff); display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                <div class="recap-header-main" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; width: 100%;">
+                <div>
                     <h3
-                        style="font-size: 1rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 0.75rem;">
-                        <i data-lucide="clipboard-list" style="width: 20px; height: 20px;"></i>
+                        style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; color: var(--primary-dark);">
+                        <i data-lucide="clipboard-list" style="width: 20px; height: 20px; color: var(--primary);"></i>
                         Data Rekap Siswa
                     </h3>
-                    <div style="display: flex; gap: 0.75rem;">
-                        <button onclick="window.print()" class="btn"
-                            style="background: #1B6B3A; color: white; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.25rem; border-radius: 10px; border: none; box-shadow: 0 4px 12px rgba(27, 107, 58, 0.2);">
-                            <i data-lucide="printer" style="width: 16px; height: 16px;"></i>
-                            Cetak Laporan Rekapitulasi
-                        </button>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Tabel rekapitulasi poin perilaku siswa</p>
+                </div>
+                
+                <div class="recap-filters" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.5rem; flex-wrap: wrap;">
+                    <div class="date-filter-container" style="display: flex; align-items: center; gap: 0.3rem; background: #f8fafc; border: 1px solid var(--border-light); padding: 0.2rem 0.4rem; border-radius: 6px;">
+                        <input type="date" name="start_date" form="recapFilterForm" value="{{ $startDate }}"
+                            onchange="document.getElementById('recapFilterForm').submit()"
+                            style="border: none; background: transparent; padding: 0; font-size: 0.7rem; font-weight: 700; color: var(--primary-dark); outline: none; width: auto;" title="Dari Tanggal">
+                        <span style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">—</span>
+                        <input type="date" name="end_date" form="recapFilterForm" value="{{ $endDate }}"
+                            onchange="document.getElementById('recapFilterForm').submit()"
+                            style="border: none; background: transparent; padding: 0; font-size: 0.7rem; font-weight: 700; color: var(--primary-dark); outline: none; width: auto;" title="Sampai Tanggal">
+                    </div>
+                    <select name="class_id" form="recapFilterForm" class="filter-select" style="border: 1px solid var(--border-light); background-color: #f8fafc; font-size: 0.7rem; font-weight: 700; color: var(--primary-dark); padding: 0.25rem 0.75rem; border-radius: 6px; height: auto;" onchange="document.getElementById('recapFilterForm').submit()">
+                        <option value="">Kelas</option>
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                        @endforeach
+                    </select>
+                    <select name="status" form="recapFilterForm" class="filter-select" style="border: 1px solid var(--border-light); background-color: #f8fafc; font-size: 0.7rem; font-weight: 700; color: var(--primary-dark); padding: 0.25rem 0.75rem; border-radius: 6px; height: auto;" onchange="document.getElementById('recapFilterForm').submit()">
+                        <option value="">Status</option>
+                        <option value="SEHAT" {{ request('status') == 'SEHAT' ? 'selected' : '' }}>Sehat</option>
+                        <option value="AMAN" {{ request('status') == 'AMAN' ? 'selected' : '' }}>Aman</option>
+                        <option value="BAIK" {{ request('status') == 'BAIK' ? 'selected' : '' }}>Baik</option>
+                        <option value="WASPADA" {{ request('status') == 'WASPADA' ? 'selected' : '' }}>Waspada</option>
+                        <option value="KRITIS" {{ request('status') == 'KRITIS' ? 'selected' : '' }}>Kritis</option>
+                    </select>
+                    <button type="button" onclick="window.print()" class="btn btn-primary print-btn" style="padding: 0.35rem 0.8rem; border-radius: 8px; font-size: 0.7rem;">
+                        <i data-lucide="printer" style="width: 12px; height: 12px;"></i>
+                        <span>Cetak Laporan</span>
+                    </button>
+                    <div class="filter-divider" style="width: 1px; height: 14px; background: var(--border);"></div>
+                    <div class="recap-summary" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.35rem; flex-wrap: wrap;">
+                        <span class="siswa-count" style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);">{{ $students->total() }} Siswa</span>
+                        <span class="status-badge"
+                            style="background: var(--primary-light); color: var(--primary); font-size: 0.65rem; padding: 0.3rem 0.6rem; border-radius: 6px;">Hal {{ $students->currentPage() }}</span>
                     </div>
                 </div>
-
-                <form id="recapFilterForm" action="{{ route('records.recap') }}" method="GET"
-                    style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-light);">
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label
-                            style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Dari
-                            Tanggal</label>
-                        <input type="date" name="start_date" value="{{ $startDate }}"
-                            onchange="document.getElementById('recapFilterForm').submit()"
-                            style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.8125rem; outline: none; background: white;">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label
-                            style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Sampai
-                            Tanggal</label>
-                        <input type="date" name="end_date" value="{{ $endDate }}"
-                            onchange="document.getElementById('recapFilterForm').submit()"
-                            style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.8125rem; outline: none; background: white;">
-                    </div>
-                    <button type="submit" class="btn"
-                        style="background: var(--primary); color: white; padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i data-lucide="filter" style="width: 16px; height: 16px;"></i>
-                        Filter Data
-                    </button>
-                    <a href="{{ route('records.recap') }}" class="btn"
-                        style="background: white; color: var(--text-muted); padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 800; font-size: 0.75rem; border: 1px solid var(--border-light);">
-                        Reset
-                    </a>
-
-                    <div style="flex: 1; min-width: 200px; display: flex; gap: 0.5rem; justify-content: flex-end; flex-wrap: wrap;">
-                        <div style="position: relative; width: 100%; max-width: 200px;">
-                            <i data-lucide="search"
-                                style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-muted);"></i>
-                            <input type="text" id="searchInput" name="search" value="{{ request('search') }}"
-                                placeholder="Cari nama..."
-                                style="width: 100%; padding: 0.5rem 1rem 0.5rem 2.25rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.75rem; outline: none;">
-                        </div>
-                        <select id="classFilter" name="class_id"
-                            onchange="document.getElementById('recapFilterForm').submit()"
-                            style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.75rem; outline: none; background: white;">
-                            <option value="">Semua Kelas</option>
-                            @foreach($classes as $class)
-                                <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>
-                                    {{ $class->name }}</option>
-                            @endforeach
-                        </select>
-                        <select id="statusFilter" name="status"
-                            onchange="document.getElementById('recapFilterForm').submit()"
-                            style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.75rem; outline: none; background: white;">
-                            <option value="">Semua Status</option>
-                            <option value="SEHAT" {{ request('status') == 'SEHAT' ? 'selected' : '' }}>Sehat</option>
-                            <option value="AMAN" {{ request('status') == 'AMAN' ? 'selected' : '' }}>Aman</option>
-                            <option value="BAIK" {{ request('status') == 'BAIK' ? 'selected' : '' }}>Baik</option>
-                            <option value="WASPADA" {{ request('status') == 'WASPADA' ? 'selected' : '' }}>Waspada</option>
-                            <option value="KRITIS" {{ request('status') == 'KRITIS' ? 'selected' : '' }}>Kritis</option>
-                        </select>
-                    </div>
-                </form>
+                </div>
             </div>
 
             <div class="table-container" id="recapTableContainer" style="overflow-x: auto;">
@@ -296,7 +339,7 @@
                     </thead>
                     <tbody>
                         @php 
-                                                    $sortedStudents = $students->sortBy(fn($s) => $s->net_points);
+                                                                                $sortedStudents = $students->sortBy(fn($s) => $s->net_points);
                             $no = 1;
                         @endphp
 
