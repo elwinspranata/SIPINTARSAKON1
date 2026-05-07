@@ -134,7 +134,7 @@
                     <div>
                         <h1 class="page-title">@yield('header_title', 'Dashboard')</h1>
                         <div class="header-meta" style="display: flex; align-items: center; gap: 0.75rem; margin-top: 4px;">
-                            <span class="motto-tag">Sehat Karakternya, Pintar Orangnya</span>
+                            <span class="motto-tag">Sempurne Rage Ilmu Ate</span>
                             <span class="header-separator" style="color: var(--text-muted); opacity: 0.3;">|</span>
                             <span class="header-subtitle">@yield('header_subtitle', 'Sistem Pembinaan Integritas Terpadu')</span>
                         </div>

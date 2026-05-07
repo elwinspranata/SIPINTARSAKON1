@@ -688,25 +688,28 @@
                 <div class="modal-welcome-title">Selamat Datang di Si Pintar</div>
 
                 <p class="modal-welcome-desc">
-                    Selamat datang ke <strong>Sistem Pembinaan Integritas Terpadu (Si Pintar) SMAN 1 Kopang</strong>,
-                    <em>"Sehat Karakternya, Pintar Orangnya"</em>.
+                    <strong>SMAN 1 Kopang</strong> memiliki visi yang terangkum dalam slogan 
+                    <strong>‘SEMPURNE RAGE ILMU ATE’</strong>. Slogan ini bukan sekadar rangkaian kata, 
+                    melainkan fondasi filosofis yang menopang tiga pilar utama pendidikan di sekolah kami:
                 </p>
 
                 <div class="modal-points">
                     <div class="modal-point">
                         <div class="modal-point-dot"></div>
                         <div class="modal-point-text">
-                            Program ini hadir sebagai <strong>partner dan penunjang terbaik</strong> dalam membentuk
-                            pribadi pelajar yang berintegritas, menyembuhkan tabiat negatif dengan pendekatan ala medis
-                            yang humanis.
+                            Penyempurnaan <strong>RAGA</strong> (fisik dan kesehatan)
                         </div>
                     </div>
                     <div class="modal-point">
                         <div class="modal-point-dot"></div>
                         <div class="modal-point-text">
-                            Demi mewujudkan generasi yang : <strong>SAMPURNE RAGE ILMU ATE</strong> &mdash; Sempurna
-                            dalam akhlak, Semangat dalam menuntut ilmu, Berilmu pengetahuan luas, dan Berjiwa hati yang
-                            bersih.
+                            Pendalaman <strong>ILMU</strong> (pengetahuan dan kompetensi)
+                        </div>
+                    </div>
+                    <div class="modal-point">
+                        <div class="modal-point-dot"></div>
+                        <div class="modal-point-text">
+                            Penataan <strong>ATE</strong> (hati, karakter, dan akhlak)
                         </div>
                     </div>
                 </div>
@@ -742,7 +745,7 @@
                     <img src="{{ asset('logo_sipintar.png') }}" alt="Logo" class="logo-img">
                 </div>
                 <p class="motto-text" style="margin-bottom: 0.25rem;">Sistem Pembinaan Integritas Terpadu</p>
-                <p class="motto-text">Sehat Karakternya, Pintar Orangnya</p>
+                <p class="motto-text">Sempurne Rage Ilmu Ate</p>
 
                 <div class="school-badge">
                     <img src="{{ asset('logo.png') }}" alt="Logo">
