@@ -74,6 +74,12 @@
                             </td>
                             <td style="padding: 1.25rem 1.5rem;">
                                 <div style="display: flex; gap: 0.5rem;">
+                                    <a href="{{ route('students.show', $r->student) }}" class="btn"
+                                        style="background: var(--primary-light); color: var(--primary); width: 32px; height: 32px; border-radius: 10px; padding: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"
+                                        onmouseover="this.style.background='var(--primary)';this.style.color='white'"
+                                        onmouseout="this.style.background='var(--primary-light)';this.style.color='var(--primary)'" title="Lihat Detail Siswa">
+                                        <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                                    </a>
                                     <a href="{{ route('records.edit', $r) }}" class="btn"
                                         style="background: #fef3c7; color: #d97706; width: 32px; height: 32px; border-radius: 10px; padding: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"
                                         onmouseover="this.style.background='#d97706';this.style.color='white'"
@@ -184,6 +190,12 @@
                             </td>
                             <td style="padding: 1.25rem 1.5rem;">
                                 <div style="display: flex; gap: 0.5rem;">
+                                    <a href="{{ route('students.show', $r->student) }}" class="btn"
+                                        style="background: var(--primary-light); color: var(--primary); width: 32px; height: 32px; border-radius: 10px; padding: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"
+                                        onmouseover="this.style.background='var(--primary)';this.style.color='white'"
+                                        onmouseout="this.style.background='var(--primary-light)';this.style.color='var(--primary)'" title="Lihat Detail Siswa">
+                                        <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                                    </a>
                                     <a href="{{ route('records.edit', $r) }}" class="btn"
                                         style="background: #fef3c7; color: #d97706; width: 32px; height: 32px; border-radius: 10px; padding: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"
                                         onmouseover="this.style.background='#d97706';this.style.color='white'"
