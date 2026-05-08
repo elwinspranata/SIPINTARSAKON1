@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('header_title', 'Laporan & Riwayat')
-    @section('header_subtitle', 'Monitoring catatan pelanggaran (Penyakit) dan prestasi (Vitamin) seluruh siswa.')
+    @section('header_subtitle', 'Monitoring catatan penyakit dan vitamin seluruh siswa.')
 
     <!-- Violation Records (Penyakit) -->
     <div class="card"
@@ -10,7 +10,7 @@
             <h3
                 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem; color: #991b1b;">
                 <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
-                Riwayat Penyakit (Pelanggaran)
+                Riwayat Penyakit
             </h3>
             <span
                 style="background: #fee2e2; color: #ef4444; padding: 0.35rem 0.75rem; border-radius: 10px; font-size: 0.75rem; font-weight: 800;">{{ $violation_records->total() }}
@@ -28,7 +28,7 @@
                             Siswa</th>
                         <th
                             style="padding: 1.25rem 1.5rem; background: #f8fafc; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light);">
-                            Pelanggaran</th>
+                            Penyakit</th>
                         <th
                             style="padding: 1.25rem 1.5rem; background: #f8fafc; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light);">
                             Poin</th>
@@ -120,7 +120,7 @@
             <h3
                 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem; color: #065f46;">
                 <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i>
-                Riwayat Vitamin (Prestasi)
+                Riwayat Vitamin
             </h3>
             <span
                 style="background: #d1fae5; color: #10b981; padding: 0.35rem 0.75rem; border-radius: 10px; font-size: 0.75rem; font-weight: 800;">{{ $vitamin_records->total() }}

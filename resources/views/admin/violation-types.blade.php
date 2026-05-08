@@ -1,11 +1,11 @@
 <x-app-layout>
-    @section('header_title', 'Kelola Jenis Pelanggaran')
-    @section('header_subtitle', 'Tambah, edit, dan hapus jenis pelanggaran (penyakit) sesuai kebutuhan sekolah.')
+    @section('header_title', 'Kelola Jenis Penyakit')
+    @section('header_subtitle', 'Tambah, edit, dan hapus jenis penyakit sesuai kebutuhan sekolah.')
 
     @section('header_actions')
     <button onclick="document.getElementById('addModal').style.display='flex'" class="btn btn-primary" style="padding: 0.6rem 1.25rem;">
         <i data-lucide="plus-circle" size="18"></i>
-        <span>Tambah Pelanggaran</span>
+        <span>Tambah Penyakit</span>
     </button>
     @endsection
 
@@ -67,7 +67,7 @@
                             <button onclick="openEditModal({{ $type->id }}, '{{ addslashes($type->name) }}', '{{ $type->category }}', '{{ addslashes($type->sub_category) }}', {{ $type->points }})" style="background: var(--primary-light); color: var(--primary); border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)';this.style.color='white'" onmouseout="this.style.background='var(--primary-light)';this.style.color='var(--primary)'">
                                 <i data-lucide="pencil" size="14"></i>
                             </button>
-                            <form action="{{ route('admin.violation-types.destroy', $type) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pelanggaran ini?')">
+                            <form action="{{ route('admin.violation-types.destroy', $type) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus penyakit ini?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" style="background: var(--danger-light); color: var(--danger); border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--danger)';this.style.color='white'" onmouseout="this.style.background='var(--danger-light)';this.style.color='var(--danger)'">
                                     <i data-lucide="trash-2" size="14"></i>
@@ -88,7 +88,7 @@
             <div style="padding: 1.5rem; background: var(--bg-hover); border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
                     <i data-lucide="plus-circle" size="18" style="color: var(--primary);"></i>
-                    Tambah Jenis Pelanggaran
+                    Tambah Jenis Penyakit
                 </h3>
                 <button onclick="document.getElementById('addModal').style.display='none'" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px;">
                     <i data-lucide="x" size="18"></i>
@@ -97,7 +97,7 @@
             <form action="{{ route('admin.violation-types.store') }}" method="POST" style="padding: 1.5rem;">
                 @csrf
                 <div class="form-group">
-                    <label class="label">Nama Pelanggaran <span style="color: var(--danger);">*</span></label>
+                    <label class="label">Nama Penyakit <span style="color: var(--danger);">*</span></label>
                     <input type="text" name="name" class="input" placeholder="Contoh: Terlambat masuk sekolah" required>
                 </div>
                 <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
@@ -135,7 +135,7 @@
             <div style="padding: 1.5rem; background: var(--bg-hover); border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
                     <i data-lucide="pencil" size="18" style="color: var(--secondary);"></i>
-                    Edit Jenis Pelanggaran
+                    Edit Jenis Penyakit
                 </h3>
                 <button onclick="document.getElementById('editModal').style.display='none'" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px;">
                     <i data-lucide="x" size="18"></i>
@@ -144,7 +144,7 @@
             <form id="editForm" method="POST" style="padding: 1.5rem;">
                 @csrf @method('PUT')
                 <div class="form-group">
-                    <label class="label">Nama Pelanggaran <span style="color: var(--danger);">*</span></label>
+                    <label class="label">Nama Penyakit <span style="color: var(--danger);">*</span></label>
                     <input type="text" name="name" id="editName" class="input" required>
                 </div>
                 <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">

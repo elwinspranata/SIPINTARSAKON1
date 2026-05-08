@@ -31,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Gate::define('admin', function ($user) {
             return $user->role === 'admin';
         });
+
     }
 }

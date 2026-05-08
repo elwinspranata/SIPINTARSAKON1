@@ -688,9 +688,7 @@
                 <div class="modal-welcome-title">Selamat Datang di Si Pintar</div>
 
                 <p class="modal-welcome-desc">
-                    <strong>SMAN 1 Kopang</strong> memiliki visi yang terangkum dalam slogan 
-                    <strong>‘SEMPURNE RAGE ILMU ATE’</strong>. Slogan ini bukan sekadar rangkaian kata, 
-                    melainkan fondasi filosofis yang menopang tiga pilar utama pendidikan di sekolah kami:
+                    Selamat datang ke <strong>Sistem Pembinaan Integritas Terpadu (Si Pintar) SMAN 1 Kopang</strong>, “Sehat Karakternya, Pintar Orangnya”. Program ini hadir sebagai partner dan penunjang terbaik dalam membentuk pribadi pelajar yang berintegriti, menyembuhkan tabiat negatif dengan pendekatan ala medis yang humanis, demi mewujudkan generasi yang : <strong>SAMPURNE RAGE ILMU ATE</strong>. Slogan ini bukan sekadar rangkaian kata, melainkan fondasi filosofis yang menopang tiga pilar utama pendidikan di sekolah kami:
                 </p>
 
                 <div class="modal-points">
@@ -745,12 +743,13 @@
                     <img src="{{ asset('logo_sipintar.png') }}" alt="Logo" class="logo-img">
                 </div>
                 <p class="motto-text" style="margin-bottom: 0.25rem;">Sistem Pembinaan Integritas Terpadu</p>
-                <p class="motto-text">Sempurne Rage Ilmu Ate</p>
+                <p class="motto-text" style="margin-bottom: 1rem; color: #1B6B3A;">“Sehat Karakternya, Pintar Orangnya”</p>
 
-                <div class="school-badge">
+                <div class="school-badge" style="margin-bottom: 0.5rem;">
                     <img src="{{ asset('logo.png') }}" alt="Logo">
                     SMA NEGERI 1 KOPANG
                 </div>
+                <p class="motto-text">Sampurne Rage Ilmu Ate</p>
             </div>
 
             {{ $slot }}

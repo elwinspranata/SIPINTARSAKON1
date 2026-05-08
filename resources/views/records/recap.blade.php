@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('header_title', 'Rekapitulasi Kolektif')
-    @section('header_subtitle', 'Rekap data pelanggaran dan kebaikan seluruh siswa secara kolektif.')
+    @section('header_subtitle', 'Rekap data penyakit dan vitamin seluruh siswa secara kolektif.')
 
     @push('styles')
         <style>
@@ -189,8 +189,10 @@
         <div class="no-print"
             style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; animation: fadeInDown 0.4s ease-out;">
             <!-- Card Total Siswa -->
-            <div class="card"
-                style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; border: 1px solid var(--border-light); background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+            <a href="{{ route('records.recap', request()->except(['page', 'status'])) }}" class="card"
+                style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; border: 1px solid var(--border-light); background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); text-decoration: none; transition: all 0.2s ease;"
+                onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px -5px rgba(0,0,0,0.05)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
                 <div
                     style="width: 56px; height: 56px; border-radius: 16px; background: #eff6ff; color: #3b82f6; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="users" style="width: 28px; height: 28px;"></i>
@@ -202,11 +204,13 @@
                     <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary-dark);">{{ $totalStudents }}
                     </div>
                 </div>
-            </div>
+            </a>
 
             <!-- Card Siswa Sehat -->
-            <div class="card"
-                style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; border: 1px solid var(--border-light); background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+            <a href="{{ route('records.recap', array_merge(request()->except('page'), ['status' => 'SEHAT'])) }}" class="card"
+                style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; border: 1px solid var(--border-light); background: linear-gradient(135deg, #ffffff 0%, #ecfef9 100%); text-decoration: none; transition: all 0.2s ease;"
+                onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px -5px rgba(0,0,0,0.05)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
                 <div
                     style="width: 56px; height: 56px; border-radius: 16px; background: #ecfef9; color: #06b6d4; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="check-circle" style="width: 28px; height: 28px;"></i>
@@ -218,11 +222,13 @@
                     <div style="font-size: 1.5rem; font-weight: 900; color: #0891b2;">{{ $healthyCount }}
                     </div>
                 </div>
-            </div>
+            </a>
 
             <!-- Card Siswa Kritis -->
-            <div class="card"
-                style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; border: 1px solid var(--border-light); background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);">
+            <a href="{{ route('records.recap', array_merge(request()->except('page'), ['status' => 'KRITIS'])) }}" class="card"
+                style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; border: 1px solid var(--border-light); background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%); text-decoration: none; transition: all 0.2s ease;"
+                onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px -5px rgba(0,0,0,0.05)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
                 <div
                     style="width: 56px; height: 56px; border-radius: 16px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="alert-circle" style="width: 28px; height: 28px;"></i>
@@ -233,7 +239,7 @@
                         Siswa Kritis</div>
                     <div style="font-size: 1.5rem; font-weight: 900; color: #dc2626;">{{ $criticalCount }}</div>
                 </div>
-            </div>
+            </a>
         </div>
 
         {{-- Filters --}}
